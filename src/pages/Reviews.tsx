@@ -1,51 +1,54 @@
 import { motion } from "motion/react";
 import { Star, Quote } from "lucide-react";
-
-const reviews = [
-  {
-    name: "Sarah L.",
-    role: "Home Owner",
-    text: "Kind, patient, and very professional. They truly understood my vision and turned my house into a home I love coming back to every day.",
-    rating: 5,
-  },
-  {
-    name: "Ahmed K.",
-    role: "Business Owner",
-    text: "Transformed our space into something inspiring. The attention to detail is unmatched, and the project was delivered on time and within budget.",
-    rating: 5,
-  },
-  {
-    name: "Yasmine M.",
-    role: "Villa Owner",
-    text: "Exceeded expectations with creativity and high-end finishes. Manifesto Interiors is the gold standard for design in Morocco.",
-    rating: 5,
-  },
-  {
-    name: "Karim B.",
-    role: "Restaurant Owner",
-    text: "The commercial design they did for our restaurant has significantly improved our customer experience. Highly recommended!",
-    rating: 5,
-  },
-  {
-    name: "Nadia T.",
-    role: "Apartment Owner",
-    text: "Professionalism at its best. They managed the entire renovation seamlessly, and the result is absolutely stunning.",
-    rating: 5,
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function Reviews() {
+  const { t, isRTL } = useLanguage();
+
+  const reviews = [
+    {
+      name: t.reviewsPage.r1.name,
+      role: t.reviewsPage.r1.role,
+      text: t.reviewsPage.r1.text,
+      rating: 5,
+    },
+    {
+      name: t.reviewsPage.r2.name,
+      role: t.reviewsPage.r2.role,
+      text: t.reviewsPage.r2.text,
+      rating: 5,
+    },
+    {
+      name: t.reviewsPage.r3.name,
+      role: t.reviewsPage.r3.role,
+      text: t.reviewsPage.r3.text,
+      rating: 5,
+    },
+    {
+      name: t.reviewsPage.r4.name,
+      role: t.reviewsPage.r4.role,
+      text: t.reviewsPage.r4.text,
+      rating: 5,
+    },
+    {
+      name: t.reviewsPage.r5.name,
+      role: t.reviewsPage.r5.role,
+      text: t.reviewsPage.r5.text,
+      rating: 5,
+    },
+  ];
+
   return (
     <div className="pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <span className="text-brand-burgundy font-medium uppercase tracking-[0.3em] text-sm mb-4 block">
-            Testimonials
+            {t.reviewsPage.tag}
           </span>
           <h1 className="text-5xl md:text-6xl font-serif text-brand-brown mb-6">
-            Client Reviews
+            {t.reviewsPage.title}
           </h1>
-          <div className="flex items-center justify-center space-x-2 mb-4">
+          <div className={cn("flex items-center justify-center mb-4", isRTL ? "space-x-reverse space-x-2" : "space-x-2")}>
             <div className="flex">
               {[...Array(5)].map((_, i) => (
                 <Star key={i} size={24} className="text-brand-burgundy fill-brand-burgundy" />
@@ -53,7 +56,7 @@ export default function Reviews() {
             </div>
             <span className="text-2xl font-serif text-brand-brown">5.0</span>
           </div>
-          <p className="text-gray-500 uppercase tracking-widest text-sm">Based on 50+ Happy Clients</p>
+          <p className="text-gray-500 uppercase tracking-widest text-sm">{t.reviewsPage.subtitle}</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -66,7 +69,7 @@ export default function Reviews() {
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="p-12 bg-white border border-gray-100 relative"
             >
-              <Quote className="text-brand-brown/10 absolute top-8 right-8" size={64} />
+              <Quote className={cn("text-brand-brown/10 absolute top-8", isRTL ? "left-8" : "right-8")} size={64} />
               <div className="flex mb-6">
                 {[...Array(review.rating)].map((_, i) => (
                   <Star key={i} size={16} className="text-brand-burgundy fill-brand-burgundy mx-0.5" />
@@ -86,3 +89,5 @@ export default function Reviews() {
     </div>
   );
 }
+
+import { cn } from "@/lib/utils";

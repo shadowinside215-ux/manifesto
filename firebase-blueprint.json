@@ -26,6 +26,17 @@
         "createdAt": { "type": "string", "format": "date-time" }
       },
       "required": ["url", "publicId", "uploadedBy", "createdAt"]
+    },
+    "SiteSettings": {
+      "title": "SiteSettings",
+      "description": "Global website settings and featured content",
+      "type": "object",
+      "properties": {
+        "key": { "type": "string" },
+        "value": { "type": "string" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["key", "value"]
     }
   },
   "firestore": {
@@ -36,6 +47,10 @@
     "/photos/{photoId}": {
       "schema": "Photo",
       "description": "Gallery photos"
+    },
+    "/settings/{settingId}": {
+      "schema": "SiteSettings",
+      "description": "Global site settings"
     }
   }
 }

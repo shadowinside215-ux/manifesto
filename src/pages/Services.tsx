@@ -1,52 +1,78 @@
 import { motion } from "motion/react";
-import { Paintbrush, Layout, Home, Building2, Sofa, Ruler } from "lucide-react";
-
-const services = [
-  {
-    title: "Interior Design",
-    desc: "Comprehensive design concepts tailored to your lifestyle and aesthetic preferences.",
-    icon: Paintbrush,
-  },
-  {
-    title: "Space Planning",
-    desc: "Optimizing the flow and functionality of your environment for maximum comfort.",
-    icon: Layout,
-  },
-  {
-    title: "Home Renovation",
-    desc: "Transforming existing spaces into modern masterpieces with high-end finishes.",
-    icon: Home,
-  },
-  {
-    title: "Commercial Design",
-    desc: "Creating inspiring workspaces and retail environments that reflect your brand.",
-    icon: Building2,
-  },
-  {
-    title: "Custom Furniture",
-    desc: "Bespoke furniture pieces designed and crafted to fit your space perfectly.",
-    icon: Sofa,
-  },
-  {
-    title: "Technical Consulting",
-    desc: "Expert advice on materials, lighting, and architectural integration.",
-    icon: Ruler,
-  },
-];
+import { Paintbrush, Layout, Home, Building2, Sofa, Ruler, Plus } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { useState } from "react";
+import UploadModal from "@/components/UploadModal";
+import { Button } from "@/components/ui/button";
 
 export default function Services() {
+  const { isAdmin } = useAuth();
+  const { t } = useLanguage();
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [uploadCategory, setUploadCategory] = useState("Residential");
+
+  const services = [
+    {
+      title: t.services.s1.title,
+      desc: t.services.s1.desc,
+      icon: Paintbrush,
+      category: "Modern",
+    },
+    {
+      title: t.services.s2.title,
+      desc: t.services.s2.desc,
+      icon: Layout,
+      category: "Residential",
+    },
+    {
+      title: t.services.s3.title,
+      desc: t.services.s3.desc,
+      icon: Home,
+      category: "Residential",
+    },
+    {
+      title: t.services.s4.title,
+      desc: t.services.s4.desc,
+      icon: Building2,
+      category: "Commercial",
+    },
+    {
+      title: t.services.s5.title,
+      desc: t.services.s5.desc,
+      icon: Sofa,
+      category: "Traditional",
+    },
+    {
+      title: t.services.s6.title,
+      desc: t.services.s6.desc,
+      icon: Ruler,
+      category: "Modern",
+    },
+  ];
+
+  const openUpload = (category: string) => {
+    setUploadCategory(category);
+    setIsUploadModalOpen(true);
+  };
+
   return (
     <div className="pt-32 pb-24 px-6">
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)} 
+        defaultCategory={uploadCategory}
+      />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-20">
           <span className="text-brand-burgundy font-medium uppercase tracking-[0.3em] text-sm mb-4 block">
-            Our Expertise
+            {t.services.tag}
           </span>
           <h1 className="text-5xl md:text-6xl font-serif text-brand-brown mb-6">
-            Design Services
+            {t.services.title}
           </h1>
           <p className="text-gray-600 max-w-2xl mx-auto text-lg">
-            We offer a full spectrum of interior architecture and design services, delivering excellence from initial concept to final installation.
+            {t.services.subtitle}
           </p>
         </div>
 
@@ -58,7 +84,7 @@ export default function Services() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="group p-12 bg-white border border-gray-100 hover:border-brand-brown transition-all duration-500 hover:shadow-2xl hover:-translate-y-2"
+              className="group p-12 bg-white border border-gray-100 hover:border-brand-brown transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 relative"
             >
               <div className="w-16 h-16 bg-brand-brown/5 flex items-center justify-center mb-8 group-hover:bg-brand-burgundy transition-colors duration-500">
                 <service.icon className="text-brand-brown group-hover:text-white transition-colors duration-500" size={32} />
@@ -66,9 +92,18 @@ export default function Services() {
               <h3 className="text-2xl font-serif text-brand-brown mb-4 group-hover:text-brand-burgundy transition-colors">
                 {service.title}
               </h3>
-              <p className="text-gray-600 leading-relaxed">
+              <p className="text-gray-600 leading-relaxed mb-6">
                 {service.desc}
               </p>
+              {isAdmin && (
+                <Button 
+                  onClick={() => openUpload(service.category)}
+                  variant="outline" 
+                  className="w-full border-gray-200 text-gray-500 hover:border-brand-burgundy hover:text-brand-burgundy rounded-none"
+                >
+                  <Plus className="mr-2" size={16} /> {t.portfolio.addPhoto}
+                </Button>
+              )}
             </motion.div>
           ))}
         </div>

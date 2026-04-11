@@ -3,52 +3,56 @@ import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { cn } from "@/lib/utils";
 
 export default function Contact() {
+  const { t, isRTL } = useLanguage();
+
   return (
     <div className="pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20">
           {/* Contact Info */}
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <span className="text-brand-burgundy font-medium uppercase tracking-[0.3em] text-sm mb-4 block">
-              Get in Touch
+              {t.contact.tag}
             </span>
             <h1 className="text-5xl md:text-6xl font-serif text-brand-brown mb-10">
-              Let's Create Your <br /> <span className="italic">Dream Space</span>
+              {t.contact.title} <br /> <span className="italic">{t.contact.titleItalic}</span>
             </h1>
             
             <div className="space-y-10 mb-12">
-              <div className="flex items-start space-x-6">
+              <div className="flex items-start gap-6">
                 <div className="w-12 h-12 bg-brand-brown/5 flex items-center justify-center shrink-0">
                   <MapPin className="text-brand-burgundy" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-serif text-brand-brown mb-1">Our Studio</h4>
+                  <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.studio}</h4>
                   <p className="text-gray-600">N° 15 Rue Tlemcen Résidence Ghita, V.N, Meknès</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-6">
+              <div className="flex items-start gap-6">
                 <div className="w-12 h-12 bg-brand-brown/5 flex items-center justify-center shrink-0">
                   <Phone className="text-brand-burgundy" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-serif text-brand-brown mb-1">Call Us</h4>
+                  <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.call}</h4>
                   <p className="text-gray-600">06 79 90 07 99</p>
                 </div>
               </div>
 
-              <div className="flex items-start space-x-6">
+              <div className="flex items-start gap-6">
                 <div className="w-12 h-12 bg-brand-brown/5 flex items-center justify-center shrink-0">
                   <Mail className="text-brand-burgundy" size={24} />
                 </div>
                 <div>
-                  <h4 className="text-lg font-serif text-brand-brown mb-1">Email Us</h4>
+                  <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.email}</h4>
                   <p className="text-gray-600">contact@manifestointeriors.ma</p>
                 </div>
               </div>
@@ -71,33 +75,33 @@ export default function Contact() {
 
           {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
+            initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
             className="bg-gray-50 p-10 md:p-16 border border-gray-100"
           >
-            <h3 className="text-3xl font-serif text-brand-brown mb-8">Send a Message</h3>
+            <h3 className="text-3xl font-serif text-brand-brown mb-8">{t.contact.formTitle}</h3>
             <form className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">Full Name</label>
+                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.nameLabel}</label>
                   <Input placeholder="John Doe" className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">Email Address</label>
+                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.emailLabel}</label>
                   <Input type="email" placeholder="john@example.com" className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
                 </div>
               </div>
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">Subject</label>
-                <Input placeholder="Inquiry about residential design" className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
+                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.subjectLabel}</label>
+                <Input placeholder={t.contact.subjectPlaceholder} className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
               </div>
               <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">Message</label>
-                <Textarea placeholder="Tell us about your project..." className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" />
+                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.messageLabel}</label>
+                <Textarea placeholder={t.contact.messagePlaceholder} className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" />
               </div>
               <Button className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none w-full py-7 text-lg uppercase tracking-widest">
-                Send Message <Send className="ml-2" size={18} />
+                {t.contact.send} <Send className={cn("ml-2", isRTL && "mr-2 ml-0")} size={18} />
               </Button>
             </form>
           </motion.div>

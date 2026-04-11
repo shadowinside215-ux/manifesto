@@ -1,23 +1,27 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { motion, AnimatePresence } from "motion/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const navLinks = [
-  { name: "Home", href: "/" },
-  { name: "About", href: "/about" },
-  { name: "Services", href: "/services" },
-  { name: "Portfolio", href: "/portfolio" },
-  { name: "Reviews", href: "/reviews" },
-  { name: "Contact", href: "/contact" },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
+import { Language } from "@/lib/translations";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isLangOpen, setIsLangOpen] = useState(false);
   const location = useLocation();
+  const { t, language, setLanguage, isRTL } = useLanguage();
+
+  const navLinks = [
+    { name: t.nav.home, href: "/" },
+    { name: t.nav.about, href: "/about" },
+    { name: t.nav.services, href: "/services" },
+    { name: t.nav.portfolio, href: "/portfolio" },
+    { name: t.nav.reviews, href: "/reviews" },
+    { name: t.nav.contact, href: "/contact" },
+  ];
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +33,14 @@ export default function Navbar() {
 
   useEffect(() => {
     setIsOpen(false);
+    setIsLangOpen(false);
   }, [location]);
+
+  const languages: { code: Language; label: string }[] = [
+    { code: "en", label: "English" },
+    { code: "fr", label: "Français" },
+    { code: "ar", label: "العربية" },
+  ];
 
   return (
     <nav
@@ -55,7 +66,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-8">
           {navLinks.map((link) => (
             <Link
-              key={link.name}
+              key={link.href}
               to={link.href}
               className={cn(
                 "text-sm font-medium uppercase tracking-widest hover:text-brand-burgundy transition-colors relative group",
@@ -69,8 +80,46 @@ export default function Navbar() {
               )} />
             </Link>
           ))}
+
+          {/* Language Switcher */}
+          <div className="relative">
+            <button 
+              onClick={() => setIsLangOpen(!isLangOpen)}
+              className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-brand-brown hover:text-brand-burgundy transition-colors"
+            >
+              <Globe size={16} />
+              {language}
+            </button>
+            <AnimatePresence>
+              {isLangOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  className="absolute top-full right-0 mt-2 bg-white shadow-xl border border-gray-100 py-2 min-w-[120px]"
+                >
+                  {languages.map((lang) => (
+                    <button
+                      key={lang.code}
+                      onClick={() => {
+                        setLanguage(lang.code);
+                        setIsLangOpen(false);
+                      }}
+                      className={cn(
+                        "w-full text-left px-4 py-2 text-sm hover:bg-gray-50 transition-colors",
+                        language === lang.code ? "text-brand-burgundy font-bold" : "text-brand-brown"
+                      )}
+                    >
+                      {lang.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+
           <Button asChild className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-6">
-            <Link to="/contact">Book Now</Link>
+            <Link to="/contact">{t.nav.book}</Link>
           </Button>
         </div>
 
@@ -95,7 +144,7 @@ export default function Navbar() {
             <div className="flex flex-col p-6 space-y-4">
               {navLinks.map((link) => (
                 <Link
-                  key={link.name}
+                  key={link.href}
                   to={link.href}
                   className={cn(
                     "text-lg font-medium uppercase tracking-widest",
@@ -105,8 +154,24 @@ export default function Navbar() {
                   {link.name}
                 </Link>
               ))}
+              
+              <div className="flex gap-4 py-2">
+                {languages.map((lang) => (
+                  <button
+                    key={lang.code}
+                    onClick={() => setLanguage(lang.code)}
+                    className={cn(
+                      "text-sm font-bold uppercase tracking-widest",
+                      language === lang.code ? "text-brand-burgundy" : "text-gray-400"
+                    )}
+                  >
+                    {lang.code}
+                  </button>
+                ))}
+              </div>
+
               <Button asChild className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none w-full py-6">
-                <Link to="/contact">Book a Consultation</Link>
+                <Link to="/contact">{t.nav.book}</Link>
               </Button>
             </div>
           </motion.div>

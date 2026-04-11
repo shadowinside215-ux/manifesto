@@ -76,6 +76,11 @@ service cloud.firestore {
       allow update: if isAdmin() && isValidPhoto(request.resource.data);
       allow delete: if isAdmin();
     }
+
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
     
     match /test/connection {
       allow read: if true;

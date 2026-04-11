@@ -6,6 +6,8 @@ import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Trash2, Upload, Loader2, Image as ImageIcon } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
+import ConfirmModal from "@/components/ConfirmModal";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface Photo {
   id: string;
@@ -23,6 +25,9 @@ export default function AdminPanel() {
   const [title, setTitle] = React.useState("");
   const [category, setCategory] = React.useState("Residential");
   const [file, setFile] = React.useState<File | null>(null);
+  const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
+  const [photoToDelete, setPhotoToDelete] = React.useState<string | null>(null);
+  const { t } = useLanguage();
 
   React.useEffect(() => {
     if (!isAdmin) return;
@@ -94,11 +99,17 @@ export default function AdminPanel() {
   };
 
   const handleDelete = async (id: string) => {
-    if (!window.confirm("Are you sure you want to delete this photo?")) return;
+    setPhotoToDelete(id);
+    setIsConfirmOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!photoToDelete) return;
     try {
-      await deleteDoc(doc(db, "photos", id));
+      await deleteDoc(doc(db, "photos", photoToDelete));
+      setPhotoToDelete(null);
     } catch (error) {
-      handleFirestoreError(error, OperationType.DELETE, `photos/${id}`);
+      handleFirestoreError(error, OperationType.DELETE, `photos/${photoToDelete}`);
     }
   };
 
@@ -136,6 +147,13 @@ export default function AdminPanel() {
 
   return (
     <div className="pt-32 pb-24 px-6 max-w-7xl mx-auto">
+      <ConfirmModal
+        isOpen={isConfirmOpen}
+        onClose={() => setIsConfirmOpen(false)}
+        onConfirm={confirmDelete}
+        title={t.admin.delete}
+        message={t.admin.confirmDelete}
+      />
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-12 gap-6">
         <div>
           <h1 className="text-4xl md:text-5xl font-serif text-brand-brown">Admin Panel</h1>

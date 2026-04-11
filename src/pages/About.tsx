@@ -1,27 +1,30 @@
 import { motion } from "motion/react";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 export default function About() {
+  const { t, isRTL } = useLanguage();
+
   return (
     <div className="pt-32 pb-24 px-6">
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
+            initial={{ opacity: 0, x: isRTL ? 50 : -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8 }}
           >
             <span className="text-brand-burgundy font-medium uppercase tracking-[0.3em] text-sm mb-4 block">
-              About Manifesto
+              {t.aboutPage.tag}
             </span>
             <h1 className="text-5xl md:text-7xl font-serif text-brand-brown mb-10 leading-tight">
-              Crafting Timeless <br /> <span className="italic">Moroccan Luxury</span>
+              {t.aboutPage.title} <br /> <span className="italic">{t.aboutPage.titleItalic}</span>
             </h1>
             <div className="space-y-6 text-gray-600 text-lg leading-relaxed">
               <p>
-                Manifesto Interiors is a premier interior architecture firm based in the historic city of Meknès, Morocco. We specialize in creating high-end residential and commercial spaces that balance functional precision with artistic soul.
+                {t.aboutPage.p1}
               </p>
               <p>
-                Our team of passionate designers and architects is dedicated to the pursuit of excellence. We believe that every space has a story to tell, and our mission is to help you tell yours through thoughtful design and impeccable craftsmanship.
+                {t.aboutPage.p2}
               </p>
             </div>
           </motion.div>
@@ -40,23 +43,26 @@ export default function About() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            <div className="absolute -top-10 -right-10 w-64 h-64 bg-brand-brown/10 -z-10" />
+            <div className={cn(
+              "absolute -top-10 w-64 h-64 bg-brand-brown/10 -z-10",
+              isRTL ? "-left-10" : "-right-10"
+            )} />
           </motion.div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
           {[
             {
-              title: "Creativity",
-              desc: "We push boundaries to deliver unique, bespoke designs that stand the test of time.",
+              title: t.aboutPage.v1.title,
+              desc: t.aboutPage.v1.desc,
             },
             {
-              title: "Professionalism",
-              desc: "From concept to completion, our process is transparent, organized, and client-focused.",
+              title: t.aboutPage.v2.title,
+              desc: t.aboutPage.v2.desc,
             },
             {
-              title: "Attention to Detail",
-              desc: "We believe the smallest details make the biggest difference in luxury design.",
+              title: t.aboutPage.v3.title,
+              desc: t.aboutPage.v3.desc,
             },
           ].map((item, index) => (
             <motion.div
@@ -76,3 +82,5 @@ export default function About() {
     </div>
   );
 }
+
+import { cn } from "@/lib/utils";

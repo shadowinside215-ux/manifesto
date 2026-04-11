@@ -1,0 +1,398 @@
+export type Language = "en" | "fr" | "ar";
+
+export const translations = {
+  en: {
+    nav: {
+      home: "Home",
+      about: "About",
+      services: "Services",
+      portfolio: "Portfolio",
+      reviews: "Reviews",
+      contact: "Contact",
+      book: "Book Now",
+      admin: "Admin"
+    },
+    hero: {
+      title: "Designing Spaces That",
+      titleItalic: "Inspire Life",
+      subtitle: "Premium interior architecture and design services in Morocco",
+      cta: "Book a Consultation"
+    },
+    about: {
+      tag: "Our Story",
+      title: "Elegance in Every Detail,",
+      titleLine2: "Crafted for You.",
+      p1: "Based in the heart of Meknès, Manifesto Interiors is more than just an interior architecture firm. We are creators of atmospheres, blending Moroccan heritage with contemporary luxury.",
+      p2: "Our philosophy revolves around creativity, professionalism, and an unwavering attention to detail. We believe that a well-designed space has the power to transform your daily life.",
+      cta: "Learn More",
+      years: "Years of Excellence"
+    },
+    portfolio: {
+      tag: "Portfolio",
+      title: "Featured Masterpieces",
+      viewAll: "View All Projects",
+      addPhoto: "Add Photo",
+      manage: "Manage Gallery",
+      noProjects: "Our latest projects will appear here soon.",
+      noProjectsAdmin: "No photos uploaded yet.",
+      uploadFirst: "Upload Your First Project",
+      all: "All"
+    },
+    testimonials: {
+      title: "What Our Clients Say",
+      subtitle: "5.0 Rating Based on Excellence",
+      t1: { name: "Sarah L.", text: "Kind, patient, and very professional. They truly understood my vision." },
+      t2: { name: "Ahmed K.", text: "Transformed our space into something inspiring. The attention to detail is unmatched." },
+      t3: { name: "Yasmine M.", text: "Exceeded expectations with creativity and high-end finishes." }
+    },
+    cta: {
+      title: "Ready to Transform",
+      titleLine2: "Your Space?",
+      p: "Let's collaborate to create an environment that reflects your personality and elevates your lifestyle.",
+      book: "Book a Consultation",
+      portfolio: "View Portfolio"
+    },
+    footer: {
+      brandDesc: "Premium interior architecture and design services based in Meknès, Morocco. We create spaces that inspire life.",
+      quickLinks: "Quick Links",
+      services: "Services",
+      contactUs: "Contact Us",
+      privacy: "Privacy Policy",
+      terms: "Terms of Service",
+      rights: "All rights reserved.",
+      admin: "Admin"
+    },
+    services: {
+      tag: "Our Expertise",
+      title: "Design Services",
+      subtitle: "We offer a full spectrum of interior architecture and design services, delivering excellence from initial concept to final installation.",
+      s1: { title: "Interior Design", desc: "Comprehensive design concepts tailored to your lifestyle and aesthetic preferences." },
+      s2: { title: "Space Planning", desc: "Optimizing the flow and functionality of your environment for maximum comfort." },
+      s3: { title: "Home Renovation", desc: "Transforming existing spaces into modern masterpieces with high-end finishes." },
+      s4: { title: "Commercial Design", desc: "Creating inspiring workspaces and retail environments that reflect your brand." },
+      s5: { title: "Custom Furniture", desc: "Bespoke furniture pieces designed and crafted to fit your space perfectly." },
+      s6: { title: "Technical Consulting", desc: "Expert advice on materials, lighting, and architectural integration." }
+    },
+    aboutPage: {
+      tag: "About Manifesto",
+      title: "Crafting Timeless",
+      titleItalic: "Moroccan Luxury",
+      p1: "Manifesto Interiors is a premier interior architecture firm based in the historic city of Meknès, Morocco. We specialize in creating high-end residential and commercial spaces that balance functional precision with artistic soul.",
+      p2: "Our team of passionate designers and architects is dedicated to the pursuit of excellence. We believe that every space has a story to tell, and our mission is to help you tell yours through thoughtful design and impeccable craftsmanship.",
+      v1: { title: "Creativity", desc: "We push boundaries to deliver unique, bespoke designs that stand the test of time." },
+      v2: { title: "Professionalism", desc: "From concept to completion, our process is transparent, organized, and client-focused." },
+      v3: { title: "Attention to Detail", desc: "We believe the smallest details make the biggest difference in luxury design." }
+    },
+    contact: {
+      tag: "Get in Touch",
+      title: "Let's Create Your",
+      titleItalic: "Dream Space",
+      studio: "Our Studio",
+      call: "Call Us",
+      email: "Email Us",
+      formTitle: "Send a Message",
+      nameLabel: "Full Name",
+      emailLabel: "Email Address",
+      subjectLabel: "Subject",
+      subjectPlaceholder: "Inquiry about residential design",
+      messageLabel: "Message",
+      messagePlaceholder: "Tell us about your project...",
+      send: "Send Message"
+    },
+    reviewsPage: {
+      tag: "Testimonials",
+      title: "Client Reviews",
+      subtitle: "Based on 50+ Happy Clients",
+      r1: { name: "Sarah L.", role: "Home Owner", text: "Kind, patient, and very professional. They truly understood my vision and turned my house into a home I love coming back to every day." },
+      r2: { name: "Ahmed K.", role: "Business Owner", text: "Transformed our space into something inspiring. The attention to detail is unmatched, and the project was delivered on time and within budget." },
+      r3: { name: "Yasmine M.", role: "Villa Owner", text: "Exceeded expectations with creativity and high-end finishes. Manifesto Interiors is the gold standard for design in Morocco." },
+      r4: { name: "Karim B.", role: "Restaurant Owner", text: "The commercial design they did for our restaurant has significantly improved our customer experience. Highly recommended!" },
+      r5: { name: "Nadia T.", role: "Apartment Owner", text: "Professionalism at its best. They managed the entire renovation seamlessly, and the result is absolutely stunning." }
+    },
+    admin: {
+      panel: "Admin Panel",
+      manage: "Manage your portfolio and project gallery",
+      signOut: "Sign Out",
+      uploadTitle: "Upload New Photo",
+      photoTitle: "Photo Title",
+      category: "Category",
+      imageFile: "Image File",
+      clickToSelect: "Click to select or drag & drop",
+      uploadBtn: "Upload to Gallery",
+      uploading: "Uploading...",
+      noPhotos: "No photos in the gallery yet.",
+      accessDenied: "Access Denied",
+      deniedP: "You do not have administrative privileges for this panel.",
+      returnHome: "Return Home",
+      adminAccess: "Admin Access",
+      adminP: "Please sign in with your authorized Google account to access the management panel.",
+      signIn: "Sign In with Google",
+      delete: "Delete",
+      confirmDelete: "Are you sure you want to delete this photo?",
+      cancel: "Cancel"
+    }
+  },
+  fr: {
+    nav: {
+      home: "Accueil",
+      about: "À Propos",
+      services: "Services",
+      portfolio: "Portfolio",
+      reviews: "Avis",
+      contact: "Contact",
+      book: "Réserver",
+      admin: "Admin"
+    },
+    hero: {
+      title: "Concevoir des Espaces Qui",
+      titleItalic: "Inspirent la Vie",
+      subtitle: "Services d'architecture d'intérieur et de design haut de gamme au Maroc",
+      cta: "Réserver une Consultation"
+    },
+    about: {
+      tag: "Notre Histoire",
+      title: "L'Élégance dans Chaque Détail,",
+      titleLine2: "Conçu pour Vous.",
+      p1: "Basé au cœur de Meknès, Manifesto Interiors est plus qu'un simple cabinet d'architecture d'intérieur. Nous sommes des créateurs d'atmosphères, mêlant l'héritage marocain au luxe contemporain.",
+      p2: "Notre philosophie s'articule autour de la créativité, du professionnalisme et d'une attention inébranlable aux détails. Nous pensons qu'un espace bien conçu a le pouvoir de transformer votre vie quotidienne.",
+      cta: "En Savoir Plus",
+      years: "Années d'Excellence"
+    },
+    portfolio: {
+      tag: "Portfolio",
+      title: "Chefs-d'œuvre Vedettes",
+      viewAll: "Voir Tous les Projets",
+      addPhoto: "Ajouter une Photo",
+      manage: "Gérer la Galerie",
+      noProjects: "Nos derniers projets apparaîtront ici bientôt.",
+      noProjectsAdmin: "Aucune photo téléchargée pour le moment.",
+      uploadFirst: "Téléchargez Votre Premier Projet",
+      all: "Tout"
+    },
+    testimonials: {
+      title: "Ce Que Disent Nos Clients",
+      subtitle: "Note de 5.0 Basée sur l'Excellence",
+      t1: { name: "Sarah L.", text: "Gentils, patients et très professionnels. Ils ont vraiment compris ma vision." },
+      t2: { name: "Ahmed K.", text: "Ils ont transformé notre espace en quelque chose d'inspirant. L'attention aux détails est inégalée." },
+      t3: { name: "Yasmine M.", text: "Ils ont dépassé les attentes avec leur créativité et leurs finitions haut de gamme." }
+    },
+    cta: {
+      title: "Prêt à Transformer",
+      titleLine2: "Votre Espace ?",
+      p: "Collaborons pour créer un environnement qui reflète votre personnalité et sublime votre style de vie.",
+      book: "Réserver une Consultation",
+      portfolio: "Voir le Portfolio"
+    },
+    footer: {
+      brandDesc: "Services d'architecture d'intérieur et de design haut de gamme basés à Meknès, Maroc. Nous créons des espaces qui inspirent la vie.",
+      quickLinks: "Liens Rapides",
+      services: "Services",
+      contactUs: "Contactez-nous",
+      privacy: "Politique de Confidentialité",
+      terms: "Conditions d'Utilisation",
+      rights: "Tous droits réservés.",
+      admin: "Admin"
+    },
+    services: {
+      tag: "Notre Expertise",
+      title: "Services de Design",
+      subtitle: "Nous offrons une gamme complète de services d'architecture d'intérieur et de design, de la conception initiale à l'installation finale.",
+      s1: { title: "Design d'Intérieur", desc: "Concepts de design complets adaptés à votre style de vie et à vos préférences esthétiques." },
+      s2: { title: "Planification d'Espace", desc: "Optimisation du flux et de la fonctionnalité de votre environnement pour un confort maximal." },
+      s3: { title: "Rénovation de Maison", desc: "Transformer des espaces existants en chefs-d'œuvre modernes avec des finitions haut de gamme." },
+      s4: { title: "Design Commercial", desc: "Créer des espaces de travail et des environnements de vente inspirants qui reflètent votre marque." },
+      s5: { title: "Mobilier sur Mesure", desc: "Pièces de mobilier sur mesure conçues et fabriquées pour s'adapter parfaitement à votre espace." },
+      s6: { title: "Conseil Technique", desc: "Conseils d'experts sur les matériaux, l'éclairage et l'intégration architecturale." }
+    },
+    aboutPage: {
+      tag: "À Propos de Manifesto",
+      title: "Façonner le Luxe",
+      titleItalic: "Marocain Intemporel",
+      p1: "Manifesto Interiors est un cabinet d'architecture d'intérieur de premier plan basé dans la ville historique de Meknès, au Maroc. Nous nous spécialisons dans la création d'espaces résidentiels et commerciaux haut de gamme qui équilibrent précision fonctionnelle et âme artistique.",
+      p2: "Notre équipe de designers et d'architectes passionnés se consacre à la poursuite de l'excellence. Nous pensons que chaque espace a une histoire à raconter, et notre mission est de vous aider à raconter la vôtre grâce à un design réfléchi et un savoir-faire impeccable.",
+      v1: { title: "Créativité", desc: "Nous repoussons les limites pour offrir des designs uniques et sur mesure qui résistent à l'épreuve du temps." },
+      v2: { title: "Professionnalisme", desc: "Du concept à la réalisation, notre processus est transparent, organisé et axé sur le client." },
+      v3: { title: "Attention aux Détails", desc: "Nous pensons que les plus petits détails font la plus grande différence dans le design de luxe." }
+    },
+    contact: {
+      tag: "Contactez-nous",
+      title: "Créons Votre",
+      titleItalic: "Espace de Rêve",
+      studio: "Notre Studio",
+      call: "Appelez-nous",
+      email: "Envoyez-nous un Email",
+      formTitle: "Envoyer un Message",
+      nameLabel: "Nom Complet",
+      emailLabel: "Adresse Email",
+      subjectLabel: "Sujet",
+      subjectPlaceholder: "Demande concernant le design résidentiel",
+      messageLabel: "Message",
+      messagePlaceholder: "Parlez-nous de votre projet...",
+      send: "Envoyer le Message"
+    },
+    reviewsPage: {
+      tag: "Témoignages",
+      title: "Avis Clients",
+      subtitle: "Basé sur plus de 50 clients satisfaits",
+      r1: { name: "Sarah L.", role: "Propriétaire", text: "Gentils, patients et très professionnels. Ils ont vraiment compris ma vision et ont transformé ma maison en un foyer où j'aime revenir chaque jour." },
+      r2: { name: "Ahmed K.", role: "Chef d'entreprise", text: "Ils ont transformé notre espace en quelque chose d'inspirant. L'attention aux détails est inégalée, et le projet a été livré à temps et dans le respect du budget." },
+      r3: { name: "Yasmine M.", role: "Propriétaire de Villa", text: "Ils ont dépassé les attentes avec leur créativité et leurs finitions haut de gamme. Manifesto Interiors est la référence du design au Maroc." },
+      r4: { name: "Karim B.", role: "Restaurateur", text: "Le design commercial qu'ils ont réalisé pour notre restaurant a considérablement amélioré l'expérience de nos clients. Hautement recommandé !" },
+      r5: { name: "Nadia T.", role: "Propriétaire d'Appartement", text: "Le professionnalisme à son meilleur. Ils ont géré toute la rénovation de manière fluide, et le résultat est absolument magnifique." }
+    },
+    admin: {
+      panel: "Panneau d'Administration",
+      manage: "Gérez votre portfolio et votre galerie de projets",
+      signOut: "Se Déconnecter",
+      uploadTitle: "Télécharger une Nouvelle Photo",
+      photoTitle: "Titre de la Photo",
+      category: "Catégorie",
+      imageFile: "Fichier Image",
+      clickToSelect: "Cliquez pour sélectionner ou glisser-déposer",
+      uploadBtn: "Télécharger dans la Galerie",
+      uploading: "Téléchargement...",
+      noPhotos: "Aucune photo dans la galerie pour le moment.",
+      accessDenied: "Accès Refusé",
+      deniedP: "Vous n'avez pas de privilèges administratifs pour ce panneau.",
+      returnHome: "Retour à l'Accueil",
+      adminAccess: "Accès Admin",
+      adminP: "Veuillez vous connecter avec votre compte Google autorisé pour accéder au panneau de gestion.",
+      signIn: "Se Connecter avec Google",
+      delete: "Supprimer",
+      confirmDelete: "Êtes-vous sûr de vouloir supprimer cette photo ?",
+      cancel: "Annuler"
+    }
+  },
+  ar: {
+    nav: {
+      home: "الرئيسية",
+      about: "من نحن",
+      services: "خدماتنا",
+      portfolio: "أعمالنا",
+      reviews: "آراء العملاء",
+      contact: "اتصل بنا",
+      book: "احجز الآن",
+      admin: "المسؤول"
+    },
+    hero: {
+      title: "تصميم مساحات",
+      titleItalic: "تلهم الحياة",
+      subtitle: "خدمات الهندسة المعمارية والتصميم الداخلي المتميزة في المغرب",
+      cta: "احجز استشارة"
+    },
+    about: {
+      tag: "قصتنا",
+      title: "الأناقة في كل تفصيل،",
+      titleLine2: "مصمم خصيصاً لك.",
+      p1: "يقع مانيفستو إنتيريورز في قلب مدينة مكناس، وهو أكثر من مجرد شركة للهندسة المعمارية الداخلية. نحن مبدعون للأجواء، نمزج بين التراث المغربي والفخامة المعاصرة.",
+      p2: "تتمحور فلسفتنا حول الإبداع والاحتراف والاهتمام الراسخ بالتفاصيل. نحن نؤمن بأن المساحة المصممة جيداً لديها القدرة على تغيير حياتك اليومية.",
+      cta: "اقرأ المزيد",
+      years: "سنوات من التميز"
+    },
+    portfolio: {
+      tag: "أعمالنا",
+      title: "روائع مختارة",
+      viewAll: "عرض جميع المشاريع",
+      addPhoto: "إضافة صورة",
+      manage: "إدارة المعرض",
+      noProjects: "ستظهر أحدث مشاريعنا هنا قريباً.",
+      noProjectsAdmin: "لم يتم تحميل أي صور بعد.",
+      uploadFirst: "حمل مشروعك الأول",
+      all: "الكل"
+    },
+    testimonials: {
+      title: "ماذا يقول عملاؤنا",
+      subtitle: "تقييم 5.0 بناءً على التميز",
+      t1: { name: "سارة ل.", text: "لطيفون، صبورون ومحترفون للغاية. لقد فهموا رؤيتي حقاً." },
+      t2: { name: "أحمد ك.", text: "حولوا مساحتنا إلى شيء ملهم. الاهتمام بالتفاصيل لا يعلى عليه." },
+      t3: { name: "ياسمين م.", text: "تجاوزوا التوقعات بإبداعهم وتشطيباتهم الراقية." }
+    },
+    cta: {
+      title: "هل أنت مستعد لتحويل",
+      titleLine2: "مساحتك؟",
+      p: "دعنا نتعاون لإنشاء بيئة تعكس شخصيتك وترتقي بأسلوب حياتك.",
+      book: "احجز استشارة",
+      portfolio: "عرض الأعمال"
+    },
+    footer: {
+      p: "خدمات الهندسة المعمارية والتصميم الداخلي المتميزة ومقرها مكناس، المغرب. نحن نصنع مساحات تلهم الحياة.",
+      brandDesc: "خدمات الهندسة المعمارية والتصميم الداخلي المتميزة ومقرها مكناس، المغرب. نحن نصنع مساحات تلهم الحياة.",
+      quickLinks: "روابط سريعة",
+      services: "خدماتنا",
+      contactUs: "اتصل بنا",
+      privacy: "سياسة الخصوصية",
+      terms: "شروط الخدمة",
+      rights: "جميع الحقوق محفوظة.",
+      admin: "المسؤول"
+    },
+    services: {
+      tag: "خبرتنا",
+      title: "خدمات التصميم",
+      subtitle: "نحن نقدم مجموعة كاملة من خدمات الهندسة المعمارية الداخلية والتصميم، ونقدم التميز من المفهوم الأولي إلى التركيب النهائي.",
+      s1: { title: "التصميم الداخلي", desc: "مفاهيم تصميم شاملة مصممة لتناسب أسلوب حياتك وتفضيلاتك الجمالية." },
+      s2: { title: "تخطيط المساحات", desc: "تحسين تدفق ووظائف بيئتك لتحقيق أقصى قدر من الراحة." },
+      s3: { title: "تجديد المنازل", desc: "تحويل المساحات الحالية إلى تحف فنية حديثة بتشطيبات راقية." },
+      s4: { title: "التصميم التجاري", desc: "إنشاء مساحات عمل وبيئات بيع بالتجزئة ملهمة تعكس علامتك التجارية." },
+      s5: { title: "أثاث مخصص", desc: "قطع أثاث مصممة ومصنوعة خصيصاً لتناسب مساحتك تماماً." },
+      s6: { title: "الاستشارات الفنية", desc: "نصائح الخبراء بشأن المواد والإضاءة والتكامل المعماري." }
+    },
+    aboutPage: {
+      tag: "حول مانيفستو",
+      title: "صياغة الفخامة",
+      titleItalic: "المغربية الخالدة",
+      p1: "مانيفستو إنتيريورز هي شركة رائدة في الهندسة المعمارية الداخلية ومقرها في مدينة مكناس التاريخية بالمغرب. نحن متخصصون في إنشاء مساحات سكنية وتجارية راقية توازن بين الدقة الوظيفية والروح الفنية.",
+      p2: "فريقنا من المصممين والمهندسين المعماريين الشغوفين مكرس للسعي وراء التميز. نحن نؤمن بأن كل مساحة لها قصة ترويها، ومهمتنا هي مساعدتك في سرد قصتك من خلال التصميم المدروس والحرفية التي لا تشوبها شائبة.",
+      v1: { title: "الإبداع", desc: "نحن ندفع الحدود لتقديم تصميمات فريدة ومخصصة تصمد أمام اختبار الزمن." },
+      v2: { title: "الاحترافية", desc: "من المفهوم إلى الاكتمال، عمليتنا شفافة ومنظمة وتركز على العميل." },
+      v3: { title: "الاهتمام بالتفاصيل", desc: "نحن نؤمن بأن أصغر التفاصيل تحدث أكبر فرق في التصميم الفاخر." }
+    },
+    contact: {
+      tag: "تواصل معنا",
+      title: "لنصنع مساحة",
+      titleItalic: "أحلامك",
+      studio: "استوديو الخاص بنا",
+      call: "اتصل بنا",
+      email: "أرسل لنا بريداً إلكترونياً",
+      formTitle: "أرسل رسالة",
+      nameLabel: "الاسم الكامل",
+      emailLabel: "البريد الإلكتروني",
+      subjectLabel: "الموضوع",
+      subjectPlaceholder: "استفسار حول التصميم السكني",
+      messageLabel: "الرسالة",
+      messagePlaceholder: "أخبرنا عن مشروعك...",
+      send: "إرسال الرسالة"
+    },
+    reviewsPage: {
+      tag: "شهادات العملاء",
+      title: "آراء العملاء",
+      subtitle: "بناءً على أكثر من 50 عميلاً سعيداً",
+      r1: { name: "سارة ل.", role: "صاحبة منزل", text: "لطيفون، صبورون ومحترفون للغاية. لقد فهموا رؤيتي حقاً وحولوا منزلي إلى مكان أحب العودة إليه كل يوم." },
+      r2: { name: "أحمد ك.", role: "صاحب عمل", text: "حولوا مساحتنا إلى شيء ملهم. الاهتمام بالتفاصيل لا يعلى عليه، وتم تسليم المشروع في الوقت المحدد وفي حدود الميزانية." },
+      r3: { name: "ياسمين م.", role: "صاحبة فيلا", text: "تجاوزوا التوقعات بإبداعهم وتشطيباتهم الراقية. مانيفستو إنتيريورز هي المعيار الذهبي للتصميم في المغرب." },
+      r4: { name: "كريم ب.", role: "صاحب مطعم", text: "التصميم التجاري الذي قاموا به لمطعمنا حسن تجربة عملائنا بشكل كبير. نوصي بهم بشدة!" },
+      r5: { name: "نادية ت.", role: "صاحبة شقة", text: "الاحترافية في أفضل حالاتها. لقد أداروا عملية التجديد بالكامل بسلاسة، والنتيجة مذهلة تماماً." }
+    },
+    admin: {
+      panel: "لوحة التحكم",
+      manage: "إدارة أعمالك ومعرض المشاريع",
+      signOut: "تسجيل الخروج",
+      uploadTitle: "تحميل صورة جديدة",
+      photoTitle: "عنوان الصورة",
+      category: "الفئة",
+      imageFile: "ملف الصورة",
+      clickToSelect: "انقر للاختيار أو السحب والإفلات",
+      uploadBtn: "تحميل إلى المعرض",
+      uploading: "جاري التحميل...",
+      noPhotos: "لا توجد صور في المعرض بعد.",
+      accessDenied: "تم رفض الوصول",
+      deniedP: "ليس لديك صلاحيات إدارية لهذه اللوحة.",
+      returnHome: "العودة للرئيسية",
+      adminAccess: "دخول المسؤول",
+      adminP: "يرجى تسجيل الدخول باستخدام حساب Google المصرح به للوصول إلى لوحة الإدارة.",
+      signIn: "تسجيل الدخول باستخدام Google",
+      delete: "حذف",
+      confirmDelete: "هل أنت متأكد أنك تريد حذف هذه الصورة؟",
+      cancel: "إلغاء"
+    }
+  }
+};
