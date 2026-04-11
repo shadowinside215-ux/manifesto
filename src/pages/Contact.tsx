@@ -67,8 +67,8 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.email}</h4>
-                  <a href="mailto:contact@manifestointeriors.ma" className="text-gray-600 hover:text-brand-burgundy transition-colors">
-                    contact@manifestointeriors.ma
+                  <a href="mailto:manifesto.interiors@gmail.com" className="text-gray-600 hover:text-brand-burgundy transition-colors">
+                    manifesto.interiors@gmail.com
                   </a>
                 </div>
               </div>
@@ -97,26 +97,56 @@ export default function Contact() {
             className="bg-gray-50 p-10 md:p-16 border border-gray-100"
           >
             <h3 className="text-3xl font-serif text-brand-brown mb-8">{t.contact.formTitle}</h3>
-            <form className="space-y-6">
+            <form 
+              action="https://formsubmit.co/manifesto.interiors@gmail.com" 
+              method="POST"
+              className="space-y-6"
+            >
+              {/* FormSubmit Configuration */}
+              <input type="hidden" name="_subject" value="New Contact Form Submission - Manifesto Interiors" />
+              <input type="hidden" name="_template" value="table" />
+              <input type="hidden" name="_captcha" value="false" />
+              
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.nameLabel}</label>
-                  <Input placeholder="John Doe" className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
+                  <Input 
+                    name="name"
+                    required
+                    placeholder="John Doe" 
+                    className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
+                  />
                 </div>
                 <div className="space-y-2">
                   <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.emailLabel}</label>
-                  <Input type="email" placeholder="john@example.com" className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
+                  <Input 
+                    name="email"
+                    type="email" 
+                    required
+                    placeholder="john@example.com" 
+                    className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
+                  />
                 </div>
               </div>
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.subjectLabel}</label>
-                <Input placeholder={t.contact.subjectPlaceholder} className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" />
+                <Input 
+                  name="subject"
+                  required
+                  placeholder={t.contact.subjectPlaceholder} 
+                  className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
+                />
               </div>
               <div className="space-y-2">
                 <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.messageLabel}</label>
-                <Textarea placeholder={t.contact.messagePlaceholder} className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" />
+                <Textarea 
+                  name="message"
+                  required
+                  placeholder={t.contact.messagePlaceholder} 
+                  className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" 
+                />
               </div>
-              <Button className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none w-full py-7 text-lg uppercase tracking-widest">
+              <Button type="submit" className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none w-full py-7 text-lg uppercase tracking-widest">
                 {t.contact.send} <Send className={cn("ml-2", isRTL && "mr-2 ml-0")} size={18} />
               </Button>
             </form>

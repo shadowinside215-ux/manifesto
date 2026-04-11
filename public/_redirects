@@ -1,0 +1,6 @@
+/* Netlify Redirects for SPA */
+/* All requests that don't match a static file will be redirected to index.html */
+/* This allows React Router to handle the routing */
+/* See: https://docs.netlify.com/routing/redirects/rewrites-proxies/#history-pushstate-and-single-page-applications */
+
+/*    /index.html   200

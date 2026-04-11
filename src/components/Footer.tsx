@@ -81,8 +81,8 @@ export default function Footer() {
             </li>
             <li className="flex items-center gap-3">
               <Mail size={18} className="text-brand-burgundy shrink-0" />
-              <a href="mailto:contact@manifestointeriors.ma" className="hover:text-white transition-colors">
-                contact@manifestointeriors.ma
+              <a href="mailto:manifesto.interiors@gmail.com" className="hover:text-white transition-colors">
+                manifesto.interiors@gmail.com
               </a>
             </li>
           </ul>
