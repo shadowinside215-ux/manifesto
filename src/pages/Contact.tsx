@@ -33,7 +33,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.studio}</h4>
-                  <p className="text-gray-600">N° 15 Rue Tlemcen Résidence Ghita, V.N, Meknès</p>
+                  <a 
+                    href="https://www.google.com/maps/search/?api=1&query=N°+15+Rue+Tlemcen+Résidence+Ghita.+V.N,+Meknès+50000" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-brand-burgundy transition-colors"
+                  >
+                    N° 15 Rue Tlemcen Résidence Ghita. V.N, Meknès 50000
+                  </a>
                 </div>
               </div>
 
@@ -43,7 +50,14 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.call}</h4>
-                  <p className="text-gray-600">06 79 90 07 99</p>
+                  <a 
+                    href="https://wa.me/212679989008" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-brand-burgundy transition-colors"
+                  >
+                    +212 679-989008
+                  </a>
                 </div>
               </div>
 
@@ -53,7 +67,9 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.email}</h4>
-                  <p className="text-gray-600">contact@manifestointeriors.ma</p>
+                  <a href="mailto:contact@manifestointeriors.ma" className="text-gray-600 hover:text-brand-burgundy transition-colors">
+                    contact@manifestointeriors.ma
+                  </a>
                 </div>
               </div>
             </div>

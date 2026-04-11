@@ -59,15 +59,31 @@ export default function Footer() {
           <ul className="space-y-4 text-sm text-gray-300">
             <li className="flex items-start gap-3">
               <MapPin size={18} className="text-brand-burgundy shrink-0" />
-              <span>N° 15 Rue Tlemcen Résidence Ghita, V.N, Meknès</span>
+              <a 
+                href="https://www.google.com/maps/search/?api=1&query=N°+15+Rue+Tlemcen+Résidence+Ghita.+V.N,+Meknès+50000" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                N° 15 Rue Tlemcen Résidence Ghita. V.N, Meknès 50000
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <Phone size={18} className="text-brand-burgundy shrink-0" />
-              <span>06 79 90 07 99</span>
+              <a 
+                href="https://wa.me/212679989008" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="hover:text-white transition-colors"
+              >
+                +212 679-989008
+              </a>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={18} className="text-brand-burgundy shrink-0" />
-              <span>contact@manifestointeriors.ma</span>
+              <a href="mailto:contact@manifestointeriors.ma" className="hover:text-white transition-colors">
+                contact@manifestointeriors.ma
+              </a>
             </li>
           </ul>
         </div>
