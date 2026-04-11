@@ -51,12 +51,12 @@ export default function Contact() {
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.call}</h4>
                   <a 
-                    href="https://wa.me/212679989008" 
+                    href="https://wa.me/212679900799" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-gray-600 hover:text-brand-burgundy transition-colors"
                   >
-                    +212 679-989008
+                    0679900799
                   </a>
                 </div>
               </div>
