@@ -26,7 +26,7 @@ export default function Portfolio() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
-  const categories = ["All", "Residential", "Commercial", "Modern", "Traditional"];
+  const categories = ["All", "Residential", "Landscaping", "Modern", "Traditional"];
 
   useEffect(() => {
     const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));

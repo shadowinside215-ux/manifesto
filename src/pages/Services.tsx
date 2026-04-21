@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Paintbrush, Layout, Home, Building2, Sofa, Ruler, Plus } from "lucide-react";
+import { Paintbrush, Layout, Home, Trees, Sofa, Ruler, Plus } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState } from "react";
@@ -34,8 +34,8 @@ export default function Services() {
     {
       title: t.services.s4.title,
       desc: t.services.s4.desc,
-      icon: Building2,
-      category: "Commercial",
+      icon: Trees,
+      category: "Landscaping",
     },
     {
       title: t.services.s5.title,

@@ -193,7 +193,7 @@ export default function AdminPanel() {
                     className="w-full h-10 px-3 border border-gray-200 focus:border-brand-burgundy focus:ring-0 outline-none rounded-none text-sm"
                   >
                     <option value="Residential">Residential</option>
-                    <option value="Commercial">Commercial</option>
+                    <option value="Landscaping">Landscaping</option>
                     <option value="Modern">Modern</option>
                     <option value="Traditional">Traditional</option>
                   </select>

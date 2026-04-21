@@ -69,7 +69,7 @@ export const translations = {
       s1: { title: "Interior Design", desc: "Comprehensive design concepts tailored to your lifestyle and aesthetic preferences." },
       s2: { title: "Space Planning", desc: "Optimizing the flow and functionality of your environment for maximum comfort." },
       s3: { title: "Home Renovation", desc: "Transforming existing spaces into modern masterpieces with high-end finishes." },
-      s4: { title: "Commercial Design", desc: "Creating inspiring workspaces and retail environments that reflect your brand." },
+      s4: { title: "Landscaping", desc: "Expert landscape architecture and garden design to harmonize your outdoor spaces." },
       s5: { title: "Custom Furniture", desc: "Bespoke furniture pieces designed and crafted to fit your space perfectly." },
       s6: { title: "Technical Consulting", desc: "Expert advice on materials, lighting, and architectural integration." }
     },
@@ -200,7 +200,7 @@ export const translations = {
       s1: { title: "Design d'Intérieur", desc: "Concepts de design complets adaptés à votre style de vie et à vos préférences esthétiques." },
       s2: { title: "Planification d'Espace", desc: "Optimisation du flux et de la fonctionnalité de votre environnement pour un confort maximal." },
       s3: { title: "Rénovation de Maison", desc: "Transformer des espaces existants en chefs-d'œuvre modernes avec des finitions haut de gamme." },
-      s4: { title: "Design Commercial", desc: "Créer des espaces de travail et des environnements de vente inspirants qui reflètent votre marque." },
+      s4: { title: "Aménagement Paysager", desc: "Architecture de paysage et conception de jardins pour harmoniser vos espaces extérieurs." },
       s5: { title: "Mobilier sur Mesure", desc: "Pièces de mobilier sur mesure conçues et fabriquées pour s'adapter parfaitement à votre espace." },
       s6: { title: "Conseil Technique", desc: "Conseils d'experts sur les matériaux, l'éclairage et l'intégration architecturale." }
     },
@@ -332,7 +332,7 @@ export const translations = {
       s1: { title: "التصميم الداخلي", desc: "مفاهيم تصميم شاملة مصممة لتناسب أسلوب حياتك وتفضيلاتك الجمالية." },
       s2: { title: "تخطيط المساحات", desc: "تحسين تدفق ووظائف بيئتك لتحقيق أقصى قدر من الراحة." },
       s3: { title: "تجديد المنازل", desc: "تحويل المساحات الحالية إلى تحف فنية حديثة بتشطيبات راقية." },
-      s4: { title: "التصميم التجاري", desc: "إنشاء مساحات عمل وبيئات بيع بالتجزئة ملهمة تعكس علامتك التجارية." },
+      s4: { title: "تنسيق المناظر الطبيعية", desc: "هندسة المناظر الطبيعية وتصميم الحدائق لتنسيق مساحاتك الخارجية." },
       s5: { title: "أثاث مخصص", desc: "قطع أثاث مصممة ومصنوعة خصيصاً لتناسب مساحتك تماماً." },
       s6: { title: "الاستشارات الفنية", desc: "نصائح الخبراء بشأن المواد والإضاءة والتكامل المعماري." }
     },
