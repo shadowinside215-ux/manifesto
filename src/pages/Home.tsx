@@ -218,13 +218,30 @@ export default function Home() {
                 </Button>
               </div>
             )}
-            <div className={cn(
-              "absolute -bottom-10 bg-brand-brown p-10 hidden md:block",
-              isRTL ? "-right-10" : "-left-10"
-            )}>
-              <p className="text-white text-4xl font-serif mb-2">10+</p>
-              <p className="text-gray-300 text-xs uppercase tracking-widest">{t.about.years}</p>
-            </div>
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              animate={{ 
+                y: [0, -10, 0],
+              }}
+              viewport={{ once: true }}
+              transition={{ 
+                y: {
+                  duration: 4,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                },
+                opacity: { duration: 0.8, delay: 0.5 },
+                initialY: { duration: 0.8, delay: 0.5 }
+              }}
+              className={cn(
+                "absolute -bottom-16 bg-brand-brown p-8 hidden md:block shadow-2xl z-20",
+                isRTL ? "-right-12" : "-left-12"
+              )}
+            >
+              <p className="text-white text-4xl font-serif mb-1">10+</p>
+              <p className="text-gray-300 text-[10px] uppercase tracking-[0.2em] font-medium">{t.about.years}</p>
+            </motion.div>
           </motion.div>
         </div>
       </section>

@@ -194,6 +194,7 @@ export default function AdminPanel() {
                   >
                     <option value="Residential">Residential</option>
                     <option value="Landscaping">Landscaping</option>
+                    <option value="Kids Bedroom">Kids Bedroom</option>
                     <option value="Modern">Modern</option>
                     <option value="Traditional">Traditional</option>
                   </select>
@@ -259,7 +260,7 @@ export default function AdminPanel() {
                   />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center p-6 text-center">
                     <h4 className="text-white font-serif text-lg mb-1">{photo.title}</h4>
-                    <p className="text-brand-burgundy text-xs uppercase tracking-widest mb-4">{photo.category}</p>
+                    <p className="text-brand-burgundy text-xs uppercase tracking-widest mb-4">{photo.category === "Kids Bedroom" ? t.portfolio.kidsBedroom : photo.category}</p>
                     <Button 
                       variant="destructive" 
                       size="icon" 

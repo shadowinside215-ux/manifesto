@@ -26,7 +26,7 @@ export default function Portfolio() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
-  const categories = ["All", "Residential", "Landscaping", "Modern", "Traditional"];
+  const categories = ["All", "Residential", "Landscaping", "Kids Bedroom", "Modern", "Traditional"];
 
   useEffect(() => {
     const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
@@ -106,7 +106,7 @@ export default function Portfolio() {
                     : "bg-transparent text-brand-brown border-gray-200 hover:border-brand-brown"
                 }`}
               >
-                {cat === "All" ? t.portfolio.all : cat}
+                {cat === "All" ? t.portfolio.all : cat === "Kids Bedroom" ? t.portfolio.kidsBedroom : cat}
               </button>
             ))}
           </div>
@@ -137,7 +137,7 @@ export default function Portfolio() {
                   />
                   <div className="absolute inset-0 bg-brand-brown/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-8 text-center">
                     <span className="text-brand-burgundy text-xs uppercase tracking-[0.3em] mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      {project.category}
+                      {project.category === "Kids Bedroom" ? t.portfolio.kidsBedroom : project.category}
                     </span>
                     <h3 className="text-white text-2xl font-serif mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                       {project.title}

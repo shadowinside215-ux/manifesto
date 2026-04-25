@@ -36,7 +36,8 @@ export const translations = {
       noProjects: "Our latest projects will appear here soon.",
       noProjectsAdmin: "No photos uploaded yet.",
       uploadFirst: "Upload Your First Project",
-      all: "All"
+      all: "All",
+      kidsBedroom: "Kids Bedroom"
     },
     testimonials: {
       title: "What Our Clients Say",
@@ -167,7 +168,8 @@ export const translations = {
       noProjects: "Nos derniers projets apparaîtront ici bientôt.",
       noProjectsAdmin: "Aucune photo téléchargée pour le moment.",
       uploadFirst: "Téléchargez Votre Premier Projet",
-      all: "Tout"
+      all: "Tout",
+      kidsBedroom: "Chambre d'Enfant"
     },
     testimonials: {
       title: "Ce Que Disent Nos Clients",
@@ -298,7 +300,8 @@ export const translations = {
       noProjects: "ستظهر أحدث مشاريعنا هنا قريباً.",
       noProjectsAdmin: "لم يتم تحميل أي صور بعد.",
       uploadFirst: "حمل مشروعك الأول",
-      all: "الكل"
+      all: "الكل",
+      kidsBedroom: "غرفة نوم أطفال"
     },
     testimonials: {
       title: "ماذا يقول عملاؤنا",

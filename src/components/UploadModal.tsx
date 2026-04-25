@@ -124,6 +124,7 @@ export default function UploadModal({ isOpen, onClose, defaultCategory = "Reside
                 >
                   <option value="Residential">Residential</option>
                   <option value="Landscaping">Landscaping</option>
+                  <option value="Kids Bedroom">Kids Bedroom</option>
                   <option value="Modern">Modern</option>
                   <option value="Traditional">Traditional</option>
                 </select>
