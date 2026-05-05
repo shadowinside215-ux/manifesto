@@ -1,15 +1,12 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, Quote, Plus, Camera, Trash2 } from "lucide-react";
+import { ArrowRight, Star, Quote } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
-import { db, collection, query, orderBy, limit, onSnapshot, deleteDoc, doc, setDoc, getDoc } from "@/lib/firebase";
-import { useAuth } from "@/contexts/AuthContext";
+import { db, collection, query, orderBy, limit, onSnapshot, doc } from "@/lib/firebase";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
-import UploadModal from "@/components/UploadModal";
-import ConfirmModal from "@/components/ConfirmModal";
 
 interface Project {
   id: string;
@@ -21,13 +18,7 @@ interface Project {
 export default function Home() {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
   const [aboutImage, setAboutImage] = useState("https://images.unsplash.com/photo-1616486341351-7925b15894ca?auto=format&fit=crop&q=80&w=800");
-  const { isAdmin } = useAuth();
   const { t, isRTL } = useLanguage();
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [uploadCategory, setUploadCategory] = useState("Residential");
-  const [isReplacingAbout, setIsReplacingAbout] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
   const testimonials = [
     {
@@ -54,10 +45,10 @@ export default function Home() {
       setFeaturedProjects(projectData);
     });
 
-    // Fetch site settings for about image
-    const unsubSettings = onSnapshot(doc(db, "settings", "home_about_image"), (doc) => {
+    // Fetch site settings for story image
+    const unsubSettings = onSnapshot(doc(db, "settings", "story"), (doc) => {
       if (doc.exists()) {
-        setAboutImage(doc.data().value);
+        setAboutImage(doc.data().url || "https://images.unsplash.com/photo-1616486341351-7925b15894ca?auto=format&fit=crop&q=80&w=800");
       }
     });
 
@@ -67,55 +58,8 @@ export default function Home() {
     };
   }, []);
 
-  const openUpload = (category: string = "Residential", isReplacing: boolean = false) => {
-    setUploadCategory(category);
-    setIsReplacingAbout(isReplacing);
-    setIsUploadModalOpen(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    setPhotoToDelete(id);
-    setIsConfirmOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!photoToDelete) return;
-    try {
-      await deleteDoc(doc(db, "photos", photoToDelete));
-      setPhotoToDelete(null);
-    } catch (error) {
-      console.error("Delete failed:", error);
-    }
-  };
-
-  const handleAboutImageUpload = async (url: string) => {
-    try {
-      await setDoc(doc(db, "settings", "home_about_image"), {
-        key: "home_about_image",
-        value: url,
-        updatedAt: new Date()
-      });
-    } catch (error) {
-      console.error("Failed to update about image:", error);
-    }
-  };
-
   return (
     <div className="flex flex-col w-full">
-      <UploadModal 
-        isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)} 
-        defaultCategory={uploadCategory}
-        onUploadSuccess={isReplacingAbout ? handleAboutImageUpload : undefined}
-      />
-      <ConfirmModal
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        onConfirm={confirmDelete}
-        title={t.admin.delete}
-        message={t.admin.confirmDelete}
-      />
-
       {/* Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
@@ -208,16 +152,6 @@ export default function Home() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            {isAdmin && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/about:opacity-100 transition-opacity flex items-center justify-center">
-                <Button 
-                  onClick={() => openUpload("Modern", true)}
-                  className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white rounded-none border-none"
-                >
-                  <Camera className="mr-2" size={18} /> Replace Image
-                </Button>
-              </div>
-            )}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -259,15 +193,6 @@ export default function Home() {
               </h2>
             </div>
             <div className="flex items-center gap-4">
-              {isAdmin && (
-                <Button 
-                  onClick={() => openUpload("Residential")}
-                  variant="outline" 
-                  className="border-brand-burgundy text-brand-burgundy hover:bg-brand-burgundy hover:text-white rounded-none"
-                >
-                  <Plus className="mr-2" size={18} /> {t.portfolio.addPhoto}
-                </Button>
-              )}
               <Button asChild variant="link" className="text-brand-brown hover:text-brand-burgundy p-0 h-auto text-lg">
                 <Link to="/portfolio" className="flex items-center">
                   {t.portfolio.viewAll} <ArrowRight className={cn("ml-2", isRTL && "rotate-180 mr-2 ml-0")} size={18} />
@@ -294,18 +219,6 @@ export default function Home() {
                     referrerPolicy="no-referrer"
                   />
                   <div className="absolute inset-0 bg-brand-burgundy/0 group-hover:bg-brand-burgundy/20 transition-colors duration-500" />
-                  
-                  {isAdmin && (
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(project.id);
-                      }}
-                      className="absolute top-4 right-4 p-2 bg-white/90 text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all opacity-0 group-hover:opacity-100"
-                    >
-                      <Trash2 size={18} />
-                    </button>
-                  )}
                 </div>
                 <h3 className="text-xl font-serif text-brand-brown mb-1 group-hover:text-brand-burgundy transition-colors">
                   {project.title}
@@ -315,19 +228,8 @@ export default function Home() {
                 </p>
               </motion.div>
             ))}
-            {featuredProjects.length === 0 && !isAdmin && (
+            {featuredProjects.length === 0 && (
               <p className="text-gray-400 col-span-full text-center py-10 italic">{t.portfolio.noProjects}</p>
-            )}
-            {featuredProjects.length === 0 && isAdmin && (
-              <div className="col-span-full text-center py-10 border-2 border-dashed border-gray-200">
-                <p className="text-gray-400 mb-4 italic">{t.portfolio.noProjectsAdmin}</p>
-                <Button 
-                  onClick={() => openUpload("Residential")}
-                  className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none"
-                >
-                  {t.portfolio.uploadFirst}
-                </Button>
-              </div>
             )}
           </div>
         </div>

@@ -37,7 +37,10 @@ export const translations = {
       noProjectsAdmin: "No photos uploaded yet.",
       uploadFirst: "Upload Your First Project",
       all: "All",
-      kidsBedroom: "Kids Bedroom"
+      commercial: "Commercial",
+      residential: "Residential",
+      landscaping: "Landscaping",
+      traditional: "Traditional"
     },
     testimonials: {
       title: "What Our Clients Say",
@@ -126,8 +129,15 @@ export const translations = {
       deniedP: "You do not have administrative privileges for this panel.",
       returnHome: "Return Home",
       adminAccess: "Admin Access",
-      adminP: "Please sign in with your authorized Google account to access the management panel.",
-      signIn: "Sign In with Google",
+      adminP: "Enter your credentials to access the management panel.",
+      login: "Login",
+      username: "Username",
+      password: "Password",
+      invalid: "Invalid username or password",
+      aboutPhoto: "About Section Photo",
+      storyPhoto: "Our Story Photo",
+      changePhoto: "Change About Photo",
+      changeStoryPhoto: "Change Story Photo",
       delete: "Delete",
       confirmDelete: "Are you sure you want to delete this photo?",
       cancel: "Cancel"
@@ -169,7 +179,10 @@ export const translations = {
       noProjectsAdmin: "Aucune photo téléchargée pour le moment.",
       uploadFirst: "Téléchargez Votre Premier Projet",
       all: "Tout",
-      kidsBedroom: "Chambre d'Enfant"
+      commercial: "Commercial",
+      residential: "Résidentiel",
+      landscaping: "Aménagement Paysager",
+      traditional: "Traditionnel"
     },
     testimonials: {
       title: "Ce Que Disent Nos Clients",
@@ -258,8 +271,15 @@ export const translations = {
       deniedP: "Vous n'avez pas de privilèges administratifs pour ce panneau.",
       returnHome: "Retour à l'Accueil",
       adminAccess: "Accès Admin",
-      adminP: "Veuillez vous connecter avec votre compte Google autorisé pour accéder au panneau de gestion.",
-      signIn: "Se Connecter avec Google",
+      adminP: "Entrez vos identifiants pour accéder au panneau de gestion.",
+      login: "Se connecter",
+      username: "Nom d'utilisateur",
+      password: "Mot de passe",
+      invalid: "Nom d'utilisateur ou mot de passe invalide",
+      aboutPhoto: "Photo de la Section À Propos",
+      storyPhoto: "Photo de Notre Histoire",
+      changePhoto: "Changer la Photo À Propos",
+      changeStoryPhoto: "Changer la Photo Histoire",
       delete: "Supprimer",
       confirmDelete: "Êtes-vous sûr de vouloir supprimer cette photo ?",
       cancel: "Annuler"
@@ -301,7 +321,10 @@ export const translations = {
       noProjectsAdmin: "لم يتم تحميل أي صور بعد.",
       uploadFirst: "حمل مشروعك الأول",
       all: "الكل",
-      kidsBedroom: "غرفة نوم أطفال"
+      commercial: "تجاري",
+      residential: "سكني",
+      landscaping: "تنسيق حدائق",
+      traditional: "تقليدي"
     },
     testimonials: {
       title: "ماذا يقول عملاؤنا",
@@ -391,8 +414,15 @@ export const translations = {
       deniedP: "ليس لديك صلاحيات إدارية لهذه اللوحة.",
       returnHome: "العودة للرئيسية",
       adminAccess: "دخول المسؤول",
-      adminP: "يرجى تسجيل الدخول باستخدام حساب Google المصرح به للوصول إلى لوحة الإدارة.",
-      signIn: "تسجيل الدخول باستخدام Google",
+      adminP: "أدخل بيانات الاعتماد الخاصة بك للوصول إلى لوحة الإدارة.",
+      login: "تسجيل الدخول",
+      username: "اسم المستخدم",
+      password: "كلمة المرور",
+      invalid: "اسم المستخدم أو كلمة المرور غير صالحة",
+      aboutPhoto: "صورة قسم من نحن",
+      storyPhoto: "صورة قصتنا",
+      changePhoto: "تغيير صورة قسم من نحن",
+      changeStoryPhoto: "تغيير صورة قصتنا",
       delete: "حذف",
       confirmDelete: "هل أنت متأكد أنك تريد حذف هذه الصورة؟",
       cancel: "إلغاء"

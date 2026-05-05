@@ -1,63 +1,59 @@
 import * as React from "react";
-import { auth, db, googleProvider, signInWithPopup, signOut, onAuthStateChanged, doc, getDoc, setDoc } from "@/lib/firebase";
-import { User } from "firebase/auth";
+import { auth, signInAnonymously, signOut, onAuthStateChanged, User } from "@/lib/firebase";
 
 interface AuthContextType {
   user: User | null;
-  role: "admin" | "user" | null;
-  loading: boolean;
   isAdmin: boolean;
-  login: () => Promise<void>;
-  logout: () => Promise<void>;
+  loading: boolean;
+  login: (username: string, password: string) => Promise<boolean>;
+  logout: () => void;
 }
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
-  const [role, setRole] = React.useState<"admin" | "user" | null>(null);
+  const [isAdmin, setIsAdmin] = React.useState<boolean>(() => {
+    return localStorage.getItem("is_admin") === "true";
+  });
   const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      if (currentUser) {
-        // Check user role in Firestore
-        const userDoc = await getDoc(doc(db, "users", currentUser.uid));
-        if (userDoc.exists()) {
-          setRole(userDoc.data().role as "admin" | "user");
-        } else {
-          // New user - default role
-          const newRole = currentUser.email === "dragonballsam86@gmail.com" ? "admin" : "user";
-          const userData = {
-            uid: currentUser.uid,
-            email: currentUser.email,
-            role: newRole,
-            createdAt: new Date().toISOString()
-          };
-          await setDoc(doc(db, "users", currentUser.uid), userData);
-          setRole(newRole);
-        }
-      } else {
-        setRole(null);
-      }
       setLoading(false);
+      // Ensure isAdmin is true if logged in and localStorage flag is set
+      if (currentUser && localStorage.getItem("is_admin") === "true") {
+        setIsAdmin(true);
+      } else if (!currentUser) {
+        setIsAdmin(false);
+        localStorage.removeItem("is_admin");
+      }
     });
 
     return () => unsubscribe();
   }, []);
 
-  const login = async () => {
-    try {
-      await signInWithPopup(auth, googleProvider);
-    } catch (error) {
-      console.error("Login failed:", error);
+  const login = async (username: string, password: string): Promise<boolean> => {
+    if (username === "admin" && password === "admin2006") {
+      try {
+        await signInAnonymously(auth);
+        setIsAdmin(true);
+        localStorage.setItem("is_admin", "true");
+        return true;
+      } catch (error) {
+        console.error("Anonymous sign in failed:", error);
+        return false;
+      }
     }
+    return false;
   };
 
-  const handleLogout = async () => {
+  const logout = async () => {
     try {
       await signOut(auth);
+      setIsAdmin(false);
+      localStorage.removeItem("is_admin");
     } catch (error) {
       console.error("Logout failed:", error);
     }
@@ -65,12 +61,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <AuthContext.Provider value={{ 
-      user, 
-      role, 
+      user,
+      isAdmin, 
       loading, 
-      isAdmin: role === "admin",
       login, 
-      logout: handleLogout 
+      logout 
     }}>
       {children}
     </AuthContext.Provider>

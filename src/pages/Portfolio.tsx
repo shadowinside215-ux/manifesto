@@ -1,13 +1,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
-import { db, collection, query, orderBy, onSnapshot, deleteDoc, doc } from "@/lib/firebase";
-import { useAuth } from "@/contexts/AuthContext";
+import { db, collection, query, orderBy, onSnapshot } from "@/lib/firebase";
 import { useLanguage } from "@/contexts/LanguageContext";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
-import { Plus, Trash2 } from "lucide-react";
-import UploadModal from "@/components/UploadModal";
-import ConfirmModal from "@/components/ConfirmModal";
 
 interface Photo {
   id: string;
@@ -20,13 +14,9 @@ export default function Portfolio() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [projects, setProjects] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
-  const { isAdmin } = useAuth();
   const { t } = useLanguage();
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
-  const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
-  const categories = ["All", "Residential", "Landscaping", "Kids Bedroom", "Modern", "Traditional"];
+  const categories = ["All", "Residential", "Commercial", "Landscaping", "Traditional"];
 
   useEffect(() => {
     const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
@@ -42,39 +32,12 @@ export default function Portfolio() {
     return () => unsubscribe();
   }, []);
 
-  const handleDelete = async (id: string) => {
-    setPhotoToDelete(id);
-    setIsConfirmOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!photoToDelete) return;
-    try {
-      await deleteDoc(doc(db, "photos", photoToDelete));
-      setPhotoToDelete(null);
-    } catch (error) {
-      console.error("Delete failed:", error);
-    }
-  };
-
   const filteredProjects = activeCategory === "All" 
     ? projects 
     : projects.filter(p => p.category === activeCategory);
 
   return (
     <div className="pt-32 pb-24 px-6">
-      <UploadModal 
-        isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)} 
-        defaultCategory={activeCategory === "All" ? "Residential" : activeCategory}
-      />
-      <ConfirmModal
-        isOpen={isConfirmOpen}
-        onClose={() => setIsConfirmOpen(false)}
-        onConfirm={confirmDelete}
-        title={t.admin.delete}
-        message={t.admin.confirmDelete}
-      />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <span className="text-brand-burgundy font-medium uppercase tracking-[0.3em] text-sm mb-4 block">
@@ -84,17 +47,6 @@ export default function Portfolio() {
             {t.portfolio.title}
           </h1>
 
-          {isAdmin && (
-            <div className="flex justify-center mb-10">
-              <Button 
-                onClick={() => setIsUploadModalOpen(true)}
-                className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-8 py-6 uppercase tracking-widest"
-              >
-                <Plus className="mr-2" size={18} /> {t.portfolio.addPhoto}
-              </Button>
-            </div>
-          )}
-          
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             {categories.map((cat) => (
               <button
@@ -106,7 +58,7 @@ export default function Portfolio() {
                     : "bg-transparent text-brand-brown border-gray-200 hover:border-brand-brown"
                 }`}
               >
-                {cat === "All" ? t.portfolio.all : cat === "Kids Bedroom" ? t.portfolio.kidsBedroom : cat}
+                {cat === "All" ? t.portfolio.all : cat === "Commercial" ? t.portfolio.commercial : cat === "Residential" ? t.portfolio.residential : cat === "Landscaping" ? t.portfolio.landscaping : t.portfolio.traditional}
               </button>
             ))}
           </div>
@@ -142,20 +94,7 @@ export default function Portfolio() {
                     <h3 className="text-white text-2xl font-serif mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
                       {project.title}
                     </h3>
-                    <div className="w-12 h-px bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-150 mb-6" />
-                    
-                    {isAdmin && (
-                      <Button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(project.id);
-                        }}
-                        variant="destructive"
-                        className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-4 py-2 uppercase tracking-widest text-xs transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200"
-                      >
-                        <Trash2 className="mr-2" size={14} /> {t.admin.delete}
-                      </Button>
-                    )}
+                    <div className="w-12 h-px bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-150" />
                   </div>
                 </motion.div>
               ))}

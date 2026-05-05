@@ -39,23 +39,16 @@ service cloud.firestore {
     }
 
     function isAdmin() {
-      return isAuthenticated() && 
-        (get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin' ||
-         (request.auth.token.email == "dragonballsam86@gmail.com" && request.auth.token.email_verified == true));
-    }
-
-    function isValidUser(data) {
-      return data.keys().hasAll(['uid', 'email', 'role']) &&
-             data.uid is string &&
-             data.email is string &&
-             data.role in ['admin', 'user'];
+      return request.auth != null;
     }
 
     function isValidPhoto(data) {
-      return data.keys().hasAll(['url', 'publicId', 'uploadedBy', 'createdAt']) &&
-             data.url is string &&
-             data.publicId is string &&
-             data.uploadedBy is string &&
+      return data.keys().hasAll(['url', 'publicId', 'title', 'category', 'uploadedBy', 'createdAt']) &&
+             data.url is string && data.url.size() < 1024 &&
+             data.publicId is string && data.publicId.size() < 256 &&
+             data.title is string && data.title.size() <= 100 &&
+             data.category is string && data.category.size() <= 50 &&
+             data.uploadedBy == request.auth.uid &&
              data.createdAt is timestamp;
     }
 
@@ -64,16 +57,14 @@ service cloud.firestore {
     // ===============================================================
 
     match /users/{userId} {
-      allow read: if isOwner(userId) || isAdmin();
-      allow create: if isAuthenticated() && isValidUser(request.resource.data) && (isOwner(userId) || isAdmin());
-      allow update: if isAdmin();
-      allow delete: if isAdmin();
+      allow read, write: if false;
     }
 
     match /photos/{photoId} {
       allow read: if true; // Publicly viewable gallery
       allow create: if isAdmin() && isValidPhoto(request.resource.data);
-      allow update: if isAdmin() && isValidPhoto(request.resource.data);
+      allow update: if isAdmin() 
+                    && (isValidPhoto(request.resource.data) || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['title']) && request.resource.data.title is string));
       allow delete: if isAdmin();
     }
 

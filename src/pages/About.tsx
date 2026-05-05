@@ -1,8 +1,26 @@
 import { motion } from "motion/react";
 import { useLanguage } from "@/contexts/LanguageContext";
+import { useState, useEffect } from "react";
+import { db, doc, getDoc } from "@/lib/firebase";
 
 export default function About() {
   const { t, isRTL } = useLanguage();
+  const [photoUrl, setPhotoUrl] = useState("https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000");
+
+  const fetchAboutPhoto = async () => {
+    try {
+      const aboutDoc = await getDoc(doc(db, "settings", "about"));
+      if (aboutDoc.exists() && aboutDoc.data().url) {
+        setPhotoUrl(aboutDoc.data().url);
+      }
+    } catch (error) {
+      console.error("Failed to fetch about photo:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchAboutPhoto();
+  }, []);
 
   return (
     <div className="pt-32 pb-24 px-6">
@@ -33,11 +51,11 @@ export default function About() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="relative"
+            className="relative group/about"
           >
             <div className="aspect-square overflow-hidden">
               <img
-                src="https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000"
+                src={photoUrl}
                 alt="Studio"
                 className="w-full h-full object-cover"
                 referrerPolicy="no-referrer"

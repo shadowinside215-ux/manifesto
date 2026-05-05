@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, signInAnonymously, User } from "firebase/auth";
 import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, getDocFromServer, limit, updateDoc } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
 
@@ -7,6 +7,8 @@ const app = initializeApp(firebaseConfig);
 export const auth = getAuth(app);
 export const db = getFirestore(app, firebaseConfig.firestoreDatabaseId);
 export const googleProvider = new GoogleAuthProvider();
+
+export type { User };
 
 // Error handling for Firestore
 export enum OperationType {
@@ -58,4 +60,4 @@ async function testConnection() {
 }
 testConnection();
 
-export { signInWithPopup, signOut, onAuthStateChanged, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, limit, updateDoc };
+export { signInWithPopup, signOut, onAuthStateChanged, signInAnonymously, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, limit, updateDoc };
