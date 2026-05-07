@@ -1,11 +1,18 @@
 import { motion } from "motion/react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useState, useEffect } from "react";
-import { db, doc, getDoc } from "@/lib/firebase";
+import { db, doc, getDoc, setDoc } from "@/lib/firebase";
+import { useAuth } from "@/contexts/AuthContext";
+import { Camera } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import UploadModal from "@/components/UploadModal";
+import { cn } from "@/lib/utils";
 
 export default function About() {
   const { t, isRTL } = useLanguage();
+  const { isAdmin } = useAuth();
   const [photoUrl, setPhotoUrl] = useState("https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000");
+  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const fetchAboutPhoto = async () => {
     try {
@@ -22,8 +29,25 @@ export default function About() {
     fetchAboutPhoto();
   }, []);
 
+  const handleAboutImageUpload = async (url: string) => {
+    try {
+      await setDoc(doc(db, "settings", "about"), {
+        url: url,
+        updatedAt: new Date()
+      });
+      setPhotoUrl(url);
+    } catch (error) {
+      console.error("Failed to update about image:", error);
+    }
+  };
+
   return (
     <div className="pt-32 pb-24 px-6">
+      <UploadModal 
+        isOpen={isUploadModalOpen} 
+        onClose={() => setIsUploadModalOpen(false)} 
+        onUploadSuccess={handleAboutImageUpload}
+      />
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center mb-32">
           <motion.div
@@ -61,6 +85,16 @@ export default function About() {
                 referrerPolicy="no-referrer"
               />
             </div>
+            {isAdmin && (
+              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/about:opacity-100 transition-opacity flex items-center justify-center">
+                <Button 
+                  onClick={() => setIsUploadModalOpen(true)}
+                  className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white rounded-none border-none"
+                >
+                  <Camera className="mr-2" size={18} /> Replace Image
+                </Button>
+              </div>
+            )}
             <div className={cn(
               "absolute -top-10 w-64 h-64 bg-brand-brown/10 -z-10",
               isRTL ? "-left-10" : "-right-10"
@@ -100,5 +134,3 @@ export default function About() {
     </div>
   );
 }
-
-import { cn } from "@/lib/utils";
