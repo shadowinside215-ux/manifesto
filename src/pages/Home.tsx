@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, Quote, Plus, Camera, Trash2 } from "lucide-react";
+import { ArrowRight, Star, Quote, Plus, Camera, Trash2, Edit } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useState, useEffect } from "react";
 import { db, collection, query, orderBy, limit, onSnapshot, deleteDoc, doc, setDoc } from "@/lib/firebase";
@@ -45,13 +45,24 @@ export default function Home() {
   ];
 
   useEffect(() => {
-    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"), limit(3));
+    // We fetch and sort in memory as well to handle legacy
+    const q = query(collection(db, "photos"), limit(10)); // Fetch more to find top 3
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const projectData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Project[];
-      setFeaturedProjects(projectData);
+      
+      const sorted = [...projectData].sort((a: any, b: any) => {
+        if (a.order !== undefined && b.order !== undefined) return a.order - b.order;
+        if (a.order !== undefined) return -1;
+        if (b.order !== undefined) return 1;
+        const dateA = a.createdAt?.toDate?.()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate?.()?.getTime() || 0;
+        return dateB - dateA;
+      }).slice(0, 3);
+      
+      setFeaturedProjects(sorted);
     });
 
     // Fetch site settings for story image
@@ -67,9 +78,12 @@ export default function Home() {
     };
   }, []);
 
-  const openUpload = (category: string = "Residential", isReplacing: boolean = false) => {
+  const [editingProject, setEditingProject] = useState<Project | null>(null);
+
+  const openUpload = (category: string = "Residential", isReplacing: boolean = false, project: Project | null = null) => {
     setUploadCategory(category);
     setIsReplacingAbout(isReplacing);
+    setEditingProject(project);
     setIsUploadModalOpen(true);
   };
 
@@ -103,9 +117,14 @@ export default function Home() {
     <div className="flex flex-col w-full">
       <UploadModal 
         isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)} 
+        onClose={() => {
+          setIsUploadModalOpen(false);
+          setEditingProject(null);
+        }} 
         defaultCategory={uploadCategory}
         onUploadSuccess={isReplacingAbout ? handleAboutImageUpload : undefined}
+        editId={editingProject?.id}
+        initialTitle={editingProject?.title}
       />
       <ConfirmModal
         isOpen={isConfirmOpen}
@@ -294,15 +313,28 @@ export default function Home() {
                   <div className="absolute inset-0 bg-brand-burgundy/0 group-hover:bg-brand-burgundy/20 transition-colors duration-500" />
                   
                   {isAdmin && (
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleDelete(project.id);
-                      }}
-                      className="absolute top-4 right-4 p-2 bg-white/90 text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all opacity-0 group-hover:opacity-100"
-                    >
-                      <Trash2 size={18} />
-                    </button>
+                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          openUpload(project.category, false, project);
+                        }}
+                        className="p-2 bg-white/90 text-brand-brown hover:bg-brand-burgundy hover:text-white transition-all shadow-sm"
+                        title="Replace"
+                      >
+                        <Edit size={18} />
+                      </button>
+                      <button 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleDelete(project.id);
+                        }}
+                        className="p-2 bg-white/90 text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all shadow-sm"
+                        title="Delete"
+                      >
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
                   )}
                 </div>
                 <h3 className="text-xl font-serif text-brand-brown mb-1 group-hover:text-brand-burgundy transition-colors">

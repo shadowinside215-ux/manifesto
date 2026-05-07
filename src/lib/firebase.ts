@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged, signInAnonymously, setPersistence, browserLocalPersistence, User } from "firebase/auth";
-import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, getDocFromServer, limit, updateDoc, serverTimestamp } from "firebase/firestore";
+import { getFirestore, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, getDocFromServer, limit, updateDoc, serverTimestamp, writeBatch } from "firebase/firestore";
 import firebaseConfig from "../../firebase-applet-config.json";
 
 const app = initializeApp(firebaseConfig);
@@ -65,4 +65,4 @@ setPersistence(auth, browserLocalPersistence).catch((err) => {
   console.error("Failed to set auth persistence:", err);
 });
 
-export { signInWithPopup, signOut, onAuthStateChanged, signInAnonymously, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, limit, updateDoc, serverTimestamp };
+export { signInWithPopup, signOut, onAuthStateChanged, signInAnonymously, doc, getDoc, setDoc, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, limit, updateDoc, serverTimestamp, writeBatch };

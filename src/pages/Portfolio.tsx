@@ -1,40 +1,182 @@
 import { motion, AnimatePresence } from "motion/react";
 import { useState, useEffect } from "react";
-import { db, collection, query, orderBy, onSnapshot, deleteDoc, doc } from "@/lib/firebase";
+import { db, collection, query, orderBy, onSnapshot, deleteDoc, doc, writeBatch } from "@/lib/firebase";
 import { useAuth } from "@/contexts/AuthContext";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, Edit, Move } from "lucide-react";
 import UploadModal from "@/components/UploadModal";
 import ConfirmModal from "@/components/ConfirmModal";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+  DragEndEvent,
+} from "@dnd-kit/core";
+import {
+  arrayMove,
+  SortableContext,
+  sortableKeyboardCoordinates,
+  verticalListSortingStrategy,
+  rectSortingStrategy,
+  useSortable,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Photo {
   id: string;
   url: string;
   title: string;
   category: string;
+  order?: number;
+  createdAt?: any;
+}
+
+interface SortablePhotoProps {
+  project: Photo;
+  isAdmin: boolean;
+  t: any;
+  handleDelete: (id: string) => void;
+  handleEdit: (project: Photo) => void;
+  key?: any; // Add optional key if necessary for TS, though usually not needed
+}
+
+function SortablePhoto({ 
+  project, 
+  isAdmin, 
+  t, 
+  handleDelete, 
+  handleEdit 
+}: SortablePhotoProps) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({ id: project.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    zIndex: isDragging ? 50 : 0,
+    opacity: isDragging ? 0.5 : 1,
+  };
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={style}
+      className="group relative aspect-[3/4] overflow-hidden cursor-pointer"
+    >
+      <img
+        src={project.url}
+        alt={project.title}
+        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+        referrerPolicy="no-referrer"
+      />
+      
+      {isAdmin && (
+        <div 
+          {...attributes} 
+          {...listeners}
+          className="absolute top-4 left-4 p-2 bg-white/90 text-brand-brown hover:bg-brand-burgundy hover:text-white transition-all opacity-0 group-hover:opacity-100 cursor-move z-10"
+          title="Drag to reorder"
+        >
+          <Move size={18} />
+        </div>
+      )}
+
+      <div className="absolute inset-0 bg-brand-brown/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-8 text-center">
+        <span className="text-brand-burgundy text-xs uppercase tracking-[0.3em] mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+          {project.category}
+        </span>
+        <h3 className="text-white text-2xl font-serif mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+          {project.title}
+        </h3>
+        <div className="w-12 h-px bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-150 mb-6" />
+        
+        {isAdmin && (
+          <div className="flex gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
+            <Button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleEdit(project);
+              }}
+              variant="outline"
+              className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white border-none rounded-none px-4 py-2 uppercase tracking-widest text-xs"
+            >
+              <Edit className="mr-2" size={14} /> Replace
+            </Button>
+            <Button 
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDelete(project.id);
+              }}
+              variant="destructive"
+              className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-4 py-2 uppercase tracking-widest text-xs"
+            >
+              <Trash2 className="mr-2" size={14} /> {t.admin.delete}
+            </Button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }
 
 export default function Portfolio() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const [activeCategory, setActiveCategory] = useState("Residential");
   const [projects, setProjects] = useState<Photo[]>([]);
   const [loading, setLoading] = useState(true);
   const { isAdmin } = useAuth();
   const { t } = useLanguage();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
+  const [editingProject, setEditingProject] = useState<Photo | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [photoToDelete, setPhotoToDelete] = useState<string | null>(null);
 
-  const categories = ["All", "Residential", "Commercial", "Landscaping", "Traditional"];
+  const categories = ["Residential", "Commercial", "Landscaping", "Traditional"];
+
+  const sensors = useSensors(
+    useSensor(PointerSensor, {
+      activationConstraint: {
+        distance: 8,
+      },
+    }),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
 
   useEffect(() => {
-    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
+    // We fetch all photos and sort them in memory to handle legacy docs without 'order'
+    const q = query(collection(db, "photos"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const photoData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Photo[];
-      setProjects(photoData);
+      
+      // Sort by order asc, then by createdAt desc for legacy
+      const sortedData = [...photoData].sort((a, b) => {
+        if (a.order !== undefined && b.order !== undefined) {
+          return a.order - b.order;
+        }
+        if (a.order !== undefined) return -1;
+        if (b.order !== undefined) return 1;
+        
+        // Fallback to createdAt
+        const dateA = a.createdAt?.toDate?.()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate?.()?.getTime() || 0;
+        return dateB - dateA;
+      });
+
+      setProjects(sortedData);
       setLoading(false);
     });
 
@@ -56,16 +198,56 @@ export default function Portfolio() {
     }
   };
 
-  const filteredProjects = activeCategory === "All" 
-    ? projects 
-    : projects.filter(p => p.category === activeCategory);
+  const handleEdit = (photo: Photo) => {
+    setEditingProject(photo);
+    setIsUploadModalOpen(true);
+  };
+
+  const handleDragEnd = async (event: DragEndEvent) => {
+    const { active, over } = event;
+
+    if (over && active.id !== over.id) {
+      const activeId = active.id;
+      const overId = over.id;
+      
+      const filteredItems = projects.filter(p => p.category === activeCategory);
+      const oldIndex = filteredItems.findIndex(item => item.id === activeId);
+      const newIndex = filteredItems.findIndex(item => item.id === overId);
+
+      const newFilteredItems = arrayMove(filteredItems, oldIndex, newIndex) as Photo[];
+      
+      // Update local state immediately for smooth UI
+      const otherCategories = projects.filter(p => p.category !== activeCategory);
+      setProjects([...otherCategories, ...newFilteredItems].sort((a, b) => (a.order || 0) - (b.order || 0)));
+
+      // Update Firestore in batch
+      try {
+        const batch = writeBatch(db);
+        newFilteredItems.forEach((item, index) => {
+          batch.update(doc(db, "photos", item.id), {
+            order: index
+          });
+        });
+        await batch.commit();
+      } catch (error) {
+        console.error("Failed to update order:", error);
+      }
+    }
+  };
+
+  const filteredProjects = projects.filter(p => p.category === activeCategory);
 
   return (
     <div className="pt-32 pb-24 px-6">
       <UploadModal 
         isOpen={isUploadModalOpen} 
-        onClose={() => setIsUploadModalOpen(false)} 
-        defaultCategory={activeCategory === "All" ? "Residential" : activeCategory}
+        onClose={() => {
+          setIsUploadModalOpen(false);
+          setEditingProject(null);
+        }} 
+        defaultCategory={editingProject?.category || activeCategory}
+        editId={editingProject?.id}
+        initialTitle={editingProject?.title}
       />
       <ConfirmModal
         isOpen={isConfirmOpen}
@@ -86,7 +268,10 @@ export default function Portfolio() {
           {isAdmin && (
             <div className="flex justify-center mb-10">
               <Button 
-                onClick={() => setIsUploadModalOpen(true)}
+                onClick={() => {
+                  setEditingProject(null);
+                  setIsUploadModalOpen(true);
+                }}
                 className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-8 py-6 uppercase tracking-widest"
               >
                 <Plus className="mr-2" size={18} /> {t.portfolio.addPhoto}
@@ -105,7 +290,7 @@ export default function Portfolio() {
                     : "bg-transparent text-brand-brown border-gray-200 hover:border-brand-brown"
                 }`}
               >
-                {cat === "All" ? t.portfolio.all : cat === "Commercial" ? t.portfolio.commercial : cat === "Residential" ? t.portfolio.residential : cat === "Landscaping" ? t.portfolio.landscaping : t.portfolio.traditional}
+                {cat === "Commercial" ? t.portfolio.commercial : cat === "Residential" ? t.portfolio.residential : cat === "Landscaping" ? t.portfolio.landscaping : t.portfolio.traditional}
               </button>
             ))}
           </div>
@@ -116,50 +301,31 @@ export default function Portfolio() {
             <div className="w-12 h-12 border-4 border-brand-burgundy border-t-transparent rounded-full animate-spin" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <AnimatePresence mode="popLayout">
-              {filteredProjects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 0.9 }}
-                  transition={{ duration: 0.5 }}
-                  className="group relative aspect-[3/4] overflow-hidden cursor-pointer"
-                >
-                  <img
-                    src={project.url}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                    referrerPolicy="no-referrer"
-                  />
-                  <div className="absolute inset-0 bg-brand-brown/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-8 text-center">
-                    <span className="text-brand-burgundy text-xs uppercase tracking-[0.3em] mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                      {project.category === "Kids Bedroom" ? t.portfolio.kidsBedroom : project.category}
-                    </span>
-                    <h3 className="text-white text-2xl font-serif mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
-                      {project.title}
-                    </h3>
-                    <div className="w-12 h-px bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-150 mb-6" />
-                    
-                    {isAdmin && (
-                      <Button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(project.id);
-                        }}
-                        variant="destructive"
-                        className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-4 py-2 uppercase tracking-widest text-xs transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200"
-                      >
-                        <Trash2 className="mr-2" size={14} /> {t.admin.delete}
-                      </Button>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragEnd={handleDragEnd}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <SortableContext
+                items={filteredProjects.map(p => p.id)}
+                strategy={rectSortingStrategy}
+              >
+                <AnimatePresence mode="popLayout">
+                  {filteredProjects.map((project) => (
+                    <SortablePhoto 
+                      key={project.id}
+                      project={project}
+                      isAdmin={isAdmin}
+                      t={t}
+                      handleDelete={handleDelete}
+                      handleEdit={handleEdit}
+                    />
+                  ))}
+                </AnimatePresence>
+              </SortableContext>
+            </div>
+          </DndContext>
         )}
 
         {!loading && filteredProjects.length === 0 && (

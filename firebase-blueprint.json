@@ -23,7 +23,9 @@
         "title": { "type": "string" },
         "category": { "type": "string" },
         "uploadedBy": { "type": "string" },
-        "createdAt": { "type": "string", "format": "date-time" }
+        "order": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
       },
       "required": ["url", "publicId", "uploadedBy", "createdAt"]
     },

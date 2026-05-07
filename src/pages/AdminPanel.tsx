@@ -16,6 +16,7 @@ interface Photo {
   title: string;
   category: string;
   createdAt: any;
+  order?: number;
 }
 
 export default function AdminPanel() {
@@ -54,13 +55,24 @@ export default function AdminPanel() {
   React.useEffect(() => {
     if (!isAdmin) return;
 
-    const q = query(collection(db, "photos"), orderBy("createdAt", "desc"));
+    const q = query(collection(db, "photos"));
     const unsubscribe = onSnapshot(q, (snapshot) => {
       const photoData = snapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
       })) as Photo[];
-      setPhotos(photoData);
+      
+      // Sort by order asc, then by createdAt desc for legacy
+      const sortedData = [...photoData].sort((a, b) => {
+        if (a.order !== undefined && b.order !== undefined) return a.order - b.order;
+        if (a.order !== undefined) return -1;
+        if (b.order !== undefined) return 1;
+        const dateA = a.createdAt?.toDate?.()?.getTime() || 0;
+        const dateB = b.createdAt?.toDate?.()?.getTime() || 0;
+        return dateB - dateA;
+      });
+      
+      setPhotos(sortedData);
     }, (error) => {
       handleFirestoreError(error, OperationType.LIST, "photos");
     });
