@@ -19,10 +19,29 @@ export default function UploadModal({ isOpen, onClose, defaultCategory = "Reside
   const [title, setTitle] = React.useState("");
   const [category, setCategory] = React.useState(defaultCategory);
   const [file, setFile] = React.useState<File | null>(null);
+  const [cloudinaryConfig, setCloudinaryConfig] = React.useState<{ cloudName: string; uploadPreset: string } | null>(null);
 
   React.useEffect(() => {
     if (isOpen) {
       setCategory(defaultCategory);
+      
+      // Fetch Cloudinary config from server
+      const fetchCloudinaryConfig = async () => {
+        try {
+          const response = await fetch(`/api/config?t=${Date.now()}`);
+          const data = await response.json();
+          if (data.cloudinaryCloudName && data.cloudinaryCloudName !== "NOT_SET" && 
+              data.cloudinaryUploadPreset && data.cloudinaryUploadPreset !== "NOT_SET") {
+            setCloudinaryConfig({
+              cloudName: data.cloudinaryCloudName,
+              uploadPreset: data.cloudinaryUploadPreset
+            });
+          }
+        } catch (error) {
+          console.error("Failed to fetch Cloudinary config in Modal:", error);
+        }
+      };
+      fetchCloudinaryConfig();
     }
   }, [isOpen, defaultCategory]);
 
@@ -32,8 +51,8 @@ export default function UploadModal({ isOpen, onClose, defaultCategory = "Reside
 
     setUploading(true);
     try {
-      const cloudName = (import.meta as any).env.VITE_CLOUDINARY_CLOUD_NAME;
-      const uploadPreset = (import.meta as any).env.VITE_CLOUDINARY_UPLOAD_PRESET;
+      const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || cloudinaryConfig?.cloudName;
+      const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || cloudinaryConfig?.uploadPreset;
 
       if (!cloudName || !uploadPreset) {
         throw new Error("Cloudinary configuration missing. Please check environment variables.");
