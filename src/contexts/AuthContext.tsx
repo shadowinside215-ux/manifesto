@@ -13,20 +13,21 @@ const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
-  const [isAdmin, setIsAdmin] = React.useState<boolean>(() => {
+  const [isAdminState, setIsAdminState] = React.useState<boolean>(() => {
     return localStorage.getItem("is_admin") === "true";
   });
   const [loading, setLoading] = React.useState(true);
+
+  // isAdmin is only true if we have a user AND the flag is set
+  const isAdmin = !!user && isAdminState;
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       setLoading(false);
-      // Ensure isAdmin is true if logged in and localStorage flag is set
-      if (currentUser && localStorage.getItem("is_admin") === "true") {
-        setIsAdmin(true);
-      } else if (!currentUser) {
-        setIsAdmin(false);
+      
+      if (!currentUser) {
+        setIsAdminState(false);
         localStorage.removeItem("is_admin");
       }
     });
@@ -38,11 +39,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     if (username === "admin" && password === "admin2006") {
       try {
         await signInAnonymously(auth);
-        setIsAdmin(true);
+        setIsAdminState(true);
         localStorage.setItem("is_admin", "true");
         return true;
       } catch (error) {
         console.error("Anonymous sign in failed:", error);
+        alert("Login failed: " + (error instanceof Error ? error.message : "Unknown error"));
         return false;
       }
     }
@@ -52,7 +54,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const logout = async () => {
     try {
       await signOut(auth);
-      setIsAdmin(false);
+      setIsAdminState(false);
       localStorage.removeItem("is_admin");
     } catch (error) {
       console.error("Logout failed:", error);

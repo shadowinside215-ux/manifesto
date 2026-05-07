@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { db, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, handleFirestoreError, OperationType, setDoc, getDoc, updateDoc } from "@/lib/firebase";
+import { db, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, handleFirestoreError, OperationType, setDoc, getDoc, updateDoc, serverTimestamp } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -128,7 +128,7 @@ export default function AdminPanel() {
         title: title || "Untitled",
         category,
         uploadedBy: user.uid,
-        createdAt: new Date()
+        createdAt: serverTimestamp()
       });
 
       setFile(null);
@@ -154,7 +154,7 @@ export default function AdminPanel() {
       
       await setDoc(doc(db, "settings", "about"), {
         url: data.secure_url,
-        updatedAt: new Date()
+        updatedAt: serverTimestamp()
       });
 
       setAboutPhotoUrl(data.secure_url);
@@ -180,7 +180,7 @@ export default function AdminPanel() {
       
       await setDoc(doc(db, "settings", "story"), {
         url: data.secure_url,
-        updatedAt: new Date()
+        updatedAt: serverTimestamp()
       });
 
       setStoryPhotoUrl(data.secure_url);
@@ -207,6 +207,8 @@ export default function AdminPanel() {
       await deleteDoc(doc(db, "photos", photoToDelete));
       setPhotoToDelete(null);
     } catch (error) {
+      console.error("Delete failed:", error);
+      alert("Delete failed. Please ensure you are logged in correctly.");
       handleFirestoreError(error, OperationType.DELETE, `photos/${photoToDelete}`);
     }
   };
@@ -233,6 +235,7 @@ export default function AdminPanel() {
       setEditingTitle("");
     } catch (error) {
       console.error("Failed to update photo title:", error);
+      alert("Update failed. Please check your connection.");
       handleFirestoreError(error, OperationType.UPDATE, `photos/${photoId}`);
     } finally {
       setSavingEdit(false);
@@ -305,6 +308,11 @@ export default function AdminPanel() {
           <p className="text-gray-500 mt-2">{t.admin.manage}</p>
         </div>
         <div className="flex items-center space-x-4">
+          {(!(import.meta as any).env.VITE_CLOUDINARY_CLOUD_NAME || !(import.meta as any).env.VITE_CLOUDINARY_UPLOAD_PRESET) && (
+            <div className="bg-yellow-50 border border-yellow-100 text-yellow-800 text-xs px-3 py-2 rounded-none animate-pulse">
+              Warning: Cloudinary configuration missing. Uploads may fail.
+            </div>
+          )}
           <Button variant="outline" onClick={logout} className="border-brand-burgundy text-brand-burgundy rounded-none px-8 py-5">
             {t.admin.signOut}
           </Button>
