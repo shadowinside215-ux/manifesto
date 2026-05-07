@@ -27,6 +27,7 @@ export default function AdminPanel() {
   const [file, setFile] = React.useState<File | null>(null);
   const [isConfirmOpen, setIsConfirmOpen] = React.useState(false);
   const [photoToDelete, setPhotoToDelete] = React.useState<string | null>(null);
+  const [cloudinaryConfig, setCloudinaryConfig] = React.useState<{ cloudName: string; uploadPreset: string } | null>(null);
   const { t } = useLanguage();
 
   // Custom login state
@@ -76,6 +77,23 @@ export default function AdminPanel() {
     };
     fetchSettings();
 
+    // Fetch Cloudinary config from server if not in environment
+    const fetchCloudinaryConfig = async () => {
+      try {
+        const response = await fetch("/api/config");
+        const data = await response.json();
+        if (data.cloudinaryCloudName && data.cloudinaryUploadPreset) {
+          setCloudinaryConfig({
+            cloudName: data.cloudinaryCloudName,
+            uploadPreset: data.cloudinaryUploadPreset
+          });
+        }
+      } catch (error) {
+        console.error("Failed to fetch Cloudinary config:", error);
+      }
+    };
+    fetchCloudinaryConfig();
+
     return () => unsubscribe();
   }, [isAdmin]);
 
@@ -90,8 +108,8 @@ export default function AdminPanel() {
   };
 
   const uploadToCloudinary = async (fileToUpload: File) => {
-    const cloudName = (import.meta as any).env.VITE_CLOUDINARY_CLOUD_NAME;
-    const uploadPreset = (import.meta as any).env.VITE_CLOUDINARY_UPLOAD_PRESET;
+    const cloudName = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME || cloudinaryConfig?.cloudName;
+    const uploadPreset = import.meta.env.VITE_CLOUDINARY_UPLOAD_PRESET || cloudinaryConfig?.uploadPreset;
 
     if (!cloudName || !uploadPreset) {
       throw new Error("Cloudinary configuration missing. Please check environment variables.");
@@ -308,7 +326,7 @@ export default function AdminPanel() {
           <p className="text-gray-500 mt-2">{t.admin.manage}</p>
         </div>
         <div className="flex items-center space-x-4">
-          {(!(import.meta as any).env.VITE_CLOUDINARY_CLOUD_NAME || !(import.meta as any).env.VITE_CLOUDINARY_UPLOAD_PRESET) && (
+          {(!import.meta.env.VITE_CLOUDINARY_CLOUD_NAME && !cloudinaryConfig?.cloudName) && (
             <div className="bg-yellow-50 border border-yellow-100 text-yellow-800 text-xs px-3 py-2 rounded-none animate-pulse">
               Warning: Cloudinary configuration missing. Uploads may fail.
             </div>
