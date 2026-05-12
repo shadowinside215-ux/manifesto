@@ -97,9 +97,6 @@ export default function Footer() {
         <div className={cn("flex items-center gap-6", isRTL && "flex-row-reverse")}>
           <a href="#" className="hover:text-white">{t.footer.privacy}</a>
           <a href="#" className="hover:text-white">{t.footer.terms}</a>
-          <Link to="/admin" className="hover:text-white flex items-center gap-1">
-            <Lock size={10} /> {t.footer.admin}
-          </Link>
         </div>
       </div>
     </footer>

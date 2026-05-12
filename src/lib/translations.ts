@@ -98,9 +98,9 @@ export const translations = {
       nameLabel: "Full Name",
       emailLabel: "Email Address",
       subjectLabel: "Subject",
-      subjectPlaceholder: "Inquiry about residential design",
+      subjectPlaceholder: "",
       messageLabel: "Message",
-      messagePlaceholder: "Tell us about your project...",
+      messagePlaceholder: "",
       send: "Send Message"
     },
     reviewsPage: {
@@ -240,9 +240,9 @@ export const translations = {
       nameLabel: "Nom Complet",
       emailLabel: "Adresse Email",
       subjectLabel: "Sujet",
-      subjectPlaceholder: "Demande concernant le design résidentiel",
+      subjectPlaceholder: "",
       messageLabel: "Message",
-      messagePlaceholder: "Parlez-nous de votre projet...",
+      messagePlaceholder: "",
       send: "Envoyer le Message"
     },
     reviewsPage: {
@@ -383,9 +383,9 @@ export const translations = {
       nameLabel: "الاسم الكامل",
       emailLabel: "البريد الإلكتروني",
       subjectLabel: "الموضوع",
-      subjectPlaceholder: "استفسار حول التصميم السكني",
+      subjectPlaceholder: "",
       messageLabel: "الرسالة",
-      messagePlaceholder: "أخبرنا عن مشروعك...",
+      messagePlaceholder: "",
       send: "إرسال الرسالة"
     },
     reviewsPage: {

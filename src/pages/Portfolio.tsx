@@ -80,50 +80,15 @@ function SortablePhoto({
         referrerPolicy="no-referrer"
       />
       
-      {isAdmin && (
-        <div 
-          {...attributes} 
-          {...listeners}
-          className="absolute top-4 left-4 p-2 bg-white/90 text-brand-brown hover:bg-brand-burgundy hover:text-white transition-all opacity-0 group-hover:opacity-100 cursor-move z-10"
-          title="Drag to reorder"
-        >
-          <Move size={18} />
-        </div>
-      )}
-
-      <div className="absolute inset-0 bg-brand-brown/80 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-center p-8 text-center">
-        <span className="text-brand-burgundy text-xs uppercase tracking-[0.3em] mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end p-6 text-center bg-gradient-to-t from-black/60 to-transparent">
+        {project.title && project.title !== "Untitled" && (
+          <h3 className="text-white text-xl font-serif transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
+            {project.title}
+          </h3>
+        )}
+        <span className="text-white/80 text-[10px] uppercase tracking-[0.2em] mt-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
           {project.category}
         </span>
-        <h3 className="text-white text-2xl font-serif mb-6 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
-          {project.title}
-        </h3>
-        <div className="w-12 h-px bg-white transform scale-x-0 group-hover:scale-x-100 transition-transform duration-500 delay-150 mb-6" />
-        
-        {isAdmin && (
-          <div className="flex gap-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-200">
-            <Button 
-              onClick={(e) => {
-                e.stopPropagation();
-                handleEdit(project);
-              }}
-              variant="outline"
-              className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white border-none rounded-none px-4 py-2 uppercase tracking-widest text-xs"
-            >
-              <Edit className="mr-2" size={14} /> Replace
-            </Button>
-            <Button 
-              onClick={(e) => {
-                e.stopPropagation();
-                handleDelete(project.id);
-              }}
-              variant="destructive"
-              className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-4 py-2 uppercase tracking-widest text-xs"
-            >
-              <Trash2 className="mr-2" size={14} /> {t.admin.delete}
-            </Button>
-          </div>
-        )}
       </div>
     </div>
   );
@@ -264,20 +229,6 @@ export default function Portfolio() {
           <h1 className="text-5xl md:text-6xl font-serif text-brand-brown mb-10">
             {t.portfolio.title}
           </h1>
-
-          {isAdmin && (
-            <div className="flex justify-center mb-10">
-              <Button 
-                onClick={() => {
-                  setEditingProject(null);
-                  setIsUploadModalOpen(true);
-                }}
-                className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-8 py-6 uppercase tracking-widest"
-              >
-                <Plus className="mr-2" size={18} /> {t.portfolio.addPhoto}
-              </Button>
-            </div>
-          )}
           
           <div className="flex flex-wrap justify-center gap-4 mb-16">
             {categories.map((cat) => (

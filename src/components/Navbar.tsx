@@ -21,7 +21,6 @@ export default function Navbar() {
     { name: t.nav.portfolio, href: "/portfolio" },
     { name: t.nav.reviews, href: "/reviews" },
     { name: t.nav.contact, href: "/contact" },
-    { name: t.nav.admin, href: "/admin" },
   ];
 
   useEffect(() => {

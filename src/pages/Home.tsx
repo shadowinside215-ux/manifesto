@@ -225,16 +225,6 @@ export default function Home() {
                 referrerPolicy="no-referrer"
               />
             </div>
-            {isAdmin && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/about:opacity-100 transition-opacity flex items-center justify-center">
-                <Button 
-                  onClick={() => openUpload("Residential", true)}
-                  className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white rounded-none border-none"
-                >
-                  <Camera className="mr-2" size={18} /> Replace Image
-                </Button>
-              </div>
-            )}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -276,15 +266,6 @@ export default function Home() {
               </h2>
             </div>
             <div className="flex items-center gap-4">
-              {isAdmin && (
-                <Button 
-                  onClick={() => openUpload("Residential")}
-                  variant="outline" 
-                  className="border-brand-burgundy text-brand-burgundy hover:bg-brand-burgundy hover:text-white rounded-none"
-                >
-                  <Plus className="mr-2" size={18} /> {t.portfolio.addPhoto}
-                </Button>
-              )}
               <Button asChild variant="link" className="text-brand-brown hover:text-brand-burgundy p-0 h-auto text-lg">
                 <Link to="/portfolio" className="flex items-center">
                   {t.portfolio.viewAll} <ArrowRight className={cn("ml-2", isRTL && "rotate-180 mr-2 ml-0")} size={18} />
@@ -310,36 +291,12 @@ export default function Home() {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                     referrerPolicy="no-referrer"
                   />
-                  <div className="absolute inset-0 bg-brand-burgundy/0 group-hover:bg-brand-burgundy/20 transition-colors duration-500" />
-                  
-                  {isAdmin && (
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 group-hover:opacity-100 transition-all">
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          openUpload(project.category, false, project);
-                        }}
-                        className="p-2 bg-white/90 text-brand-brown hover:bg-brand-burgundy hover:text-white transition-all shadow-sm"
-                        title="Replace"
-                      >
-                        <Edit size={18} />
-                      </button>
-                      <button 
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleDelete(project.id);
-                        }}
-                        className="p-2 bg-white/90 text-brand-burgundy hover:bg-brand-burgundy hover:text-white transition-all shadow-sm"
-                        title="Delete"
-                      >
-                        <Trash2 size={18} />
-                      </button>
-                    </div>
-                  )}
                 </div>
-                <h3 className="text-xl font-serif text-brand-brown mb-1 group-hover:text-brand-burgundy transition-colors">
-                  {project.title}
-                </h3>
+                {project.title && project.title !== "Untitled" && (
+                  <h3 className="text-xl font-serif text-brand-brown mb-1 group-hover:text-brand-burgundy transition-colors">
+                    {project.title}
+                  </h3>
+                )}
                 <p className="text-gray-500 text-sm uppercase tracking-widest">
                   {project.category}
                 </p>

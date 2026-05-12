@@ -113,7 +113,6 @@ export default function Contact() {
                   <Input 
                     name="name"
                     required
-                    placeholder="John Doe" 
                     className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
                   />
                 </div>
@@ -123,7 +122,6 @@ export default function Contact() {
                     name="email"
                     type="email" 
                     required
-                    placeholder="john@example.com" 
                     className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
                   />
                 </div>
@@ -133,7 +131,6 @@ export default function Contact() {
                 <Input 
                   name="subject"
                   required
-                  placeholder={t.contact.subjectPlaceholder} 
                   className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
                 />
               </div>
@@ -142,7 +139,6 @@ export default function Contact() {
                 <Textarea 
                   name="message"
                   required
-                  placeholder={t.contact.messagePlaceholder} 
                   className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" 
                 />
               </div>
