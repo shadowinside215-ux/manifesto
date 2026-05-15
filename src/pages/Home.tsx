@@ -217,7 +217,7 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="relative group/about"
           >
-            <div className="aspect-[4/5] overflow-hidden">
+            <div className="aspect-[4/5] overflow-hidden relative">
               <img
                 src={aboutImage}
                 alt="Interior Design"
