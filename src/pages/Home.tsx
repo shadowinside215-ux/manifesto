@@ -319,19 +319,8 @@ export default function Home() {
                 </p>
               </motion.div>
             ))}
-            {featuredProjects.length === 0 && !isAdmin && (
+            {featuredProjects.length === 0 && (
               <p className="text-gray-400 col-span-full text-center py-10 italic">{t.portfolio.noProjects}</p>
-            )}
-            {featuredProjects.length === 0 && isAdmin && (
-              <div className="col-span-full text-center py-10 border-2 border-dashed border-gray-200">
-                <p className="text-gray-400 mb-4 italic">{t.portfolio.noProjectsAdmin}</p>
-                <Button 
-                  onClick={() => openUpload("Residential")}
-                  className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none"
-                >
-                  {t.portfolio.uploadFirst}
-                </Button>
-              </div>
             )}
           </motion.div>
         </div>

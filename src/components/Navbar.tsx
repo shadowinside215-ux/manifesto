@@ -50,16 +50,23 @@ export default function Navbar() {
       )}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Link to="/" className="flex flex-col items-start">
-          <span className={cn(
-            "text-2xl font-serif font-bold tracking-tighter transition-colors",
-            isScrolled ? "text-brand-brown" : "text-brand-brown"
-          )}>
-            MANIFESTO
-          </span>
-          <span className="text-[10px] uppercase tracking-[0.3em] font-medium -mt-1 opacity-80">
-            Interiors
-          </span>
+        <Link to="/" className="group">
+          <motion.div 
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+            className="flex flex-col items-start"
+          >
+            <span className={cn(
+              "text-2xl font-serif font-bold tracking-tighter transition-colors group-hover:text-brand-burgundy duration-500",
+              isScrolled ? "text-brand-brown" : "text-brand-brown"
+            )}>
+              MANIFESTO
+            </span>
+            <span className="text-[10px] uppercase tracking-[0.3em] font-medium -mt-1 opacity-80 group-hover:text-brand-burgundy transition-colors duration-500">
+              Interiors
+            </span>
+          </motion.div>
         </Link>
 
         {/* Desktop Nav */}

@@ -37,16 +37,14 @@ interface Photo {
 
 interface SortablePhotoProps {
   project: Photo;
-  isAdmin: boolean;
   t: any;
   handleDelete: (id: string) => void;
   handleEdit: (project: Photo) => void;
-  key?: any; // Add optional key if necessary for TS, though usually not needed
+  key?: any; 
 }
 
 function SortablePhoto({ 
   project, 
-  isAdmin, 
   t, 
   handleDelete, 
   handleEdit 
@@ -287,7 +285,6 @@ export default function Portfolio() {
                     >
                       <SortablePhoto 
                         project={project}
-                        isAdmin={isAdmin}
                         t={t}
                         handleDelete={handleDelete}
                         handleEdit={handleEdit}
