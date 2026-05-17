@@ -135,8 +135,11 @@ export default function Home() {
       />
       {/* Hero Section */}
       <section className="relative h-screen w-full flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img
+        <div className="absolute inset-0 z-0 overflow-hidden">
+          <motion.img
+            initial={{ scale: 1.1 }}
+            animate={{ scale: 1 }}
+            transition={{ duration: 10, ease: "easeOut" }}
             src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&q=80&w=1920"
             alt="Luxury Interior"
             className="w-full h-full object-cover"
@@ -274,14 +277,28 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {featuredProjects.map((project, index) => (
+          <motion.div 
+            variants={{
+              hidden: { opacity: 0 },
+              show: {
+                opacity: 1,
+                transition: {
+                  staggerChildren: 0.1
+                }
+              }
+            }}
+            initial="hidden"
+            whileInView="show"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-3 gap-8"
+          >
+            {featuredProjects.map((project) => (
               <motion.div
                 key={project.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
+                variants={{
+                  hidden: { opacity: 0, y: 30 },
+                  show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                }}
                 className="group cursor-pointer"
               >
                 <div className="relative aspect-[3/4] overflow-hidden mb-6">
@@ -316,7 +333,7 @@ export default function Home() {
                 </Button>
               </div>
             )}
-          </div>
+          </motion.div>
         </div>
       </section>
 

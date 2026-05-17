@@ -257,25 +257,46 @@ export default function Portfolio() {
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <motion.div 
+              variants={{
+                hidden: { opacity: 0 },
+                show: {
+                  opacity: 1,
+                  transition: {
+                    staggerChildren: 0.1
+                  }
+                }
+              }}
+              initial="hidden"
+              animate="show"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+            >
               <SortableContext
                 items={filteredProjects.map(p => p.id)}
                 strategy={rectSortingStrategy}
               >
                 <AnimatePresence mode="popLayout">
                   {filteredProjects.map((project) => (
-                    <SortablePhoto 
+                    <motion.div
                       key={project.id}
-                      project={project}
-                      isAdmin={isAdmin}
-                      t={t}
-                      handleDelete={handleDelete}
-                      handleEdit={handleEdit}
-                    />
+                      variants={{
+                        hidden: { opacity: 0, y: 20 },
+                        show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+                      }}
+                      layout
+                    >
+                      <SortablePhoto 
+                        project={project}
+                        isAdmin={isAdmin}
+                        t={t}
+                        handleDelete={handleDelete}
+                        handleEdit={handleEdit}
+                      />
+                    </motion.div>
                   ))}
                 </AnimatePresence>
               </SortableContext>
-            </div>
+            </motion.div>
           </DndContext>
         )}
 

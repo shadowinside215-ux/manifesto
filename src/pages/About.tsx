@@ -81,20 +81,10 @@ export default function About() {
               <img
                 src={photoUrl}
                 alt="Studio"
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover shadow-2xl"
                 referrerPolicy="no-referrer"
               />
             </div>
-            {isAdmin && (
-              <div className="absolute inset-0 bg-black/40 opacity-0 group-hover/about:opacity-100 transition-opacity flex items-center justify-center">
-                <Button 
-                  onClick={() => setIsUploadModalOpen(true)}
-                  className="bg-white text-brand-brown hover:bg-brand-burgundy hover:text-white rounded-none border-none"
-                >
-                  <Camera className="mr-2" size={18} /> Replace Image
-                </Button>
-              </div>
-            )}
             <div className={cn(
               "absolute -top-10 w-64 h-64 bg-brand-brown/10 -z-10",
               isRTL ? "-left-10" : "-right-10"
@@ -102,7 +92,21 @@ export default function About() {
           </motion.div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+        <motion.div 
+          variants={{
+            hidden: { opacity: 0 },
+            show: {
+              opacity: 1,
+              transition: {
+                staggerChildren: 0.1
+              }
+            }
+          }}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true }}
+          className="grid grid-cols-1 md:grid-cols-3 gap-12"
+        >
           {[
             {
               title: t.aboutPage.v1.title,
@@ -116,20 +120,20 @@ export default function About() {
               title: t.aboutPage.v3.title,
               desc: t.aboutPage.v3.desc,
             },
-          ].map((item, index) => (
+          ].map((item) => (
             <motion.div
               key={item.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              className="p-10 bg-gray-50 border border-gray-100"
+              variants={{
+                hidden: { opacity: 0, y: 30 },
+                show: { opacity: 1, y: 0, transition: { duration: 0.5 } }
+              }}
+              className="p-10 bg-gray-50 border border-gray-100 transition-all hover:bg-white hover:shadow-xl hover:-translate-y-1 duration-300"
             >
               <h3 className="text-2xl font-serif text-brand-brown mb-4">{item.title}</h3>
               <p className="text-gray-600 leading-relaxed">{item.desc}</p>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );
