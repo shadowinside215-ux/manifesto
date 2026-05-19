@@ -1,64 +1,11 @@
-import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { Mail, Phone, MapPin, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
 
 export default function Contact() {
   const { t, isRTL } = useLanguage();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [status, setStatus] = useState<{ type: "success" | "error"; message: string } | null>(null);
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setStatus(null);
-
-    const formData = new FormData(e.currentTarget);
-    const data = {
-      name: formData.get("name"),
-      email: formData.get("email"),
-      subject: formData.get("subject"),
-      message: formData.get("message"),
-    };
-
-    try {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(data),
-      });
-
-      const contentType = response.headers.get("content-type");
-      let result;
-      
-      if (contentType && contentType.includes("application/json")) {
-        result = await response.json();
-      } else {
-        const text = await response.text();
-        console.error("Non-JSON response:", text);
-        throw new Error(`Server error (${response.status}): The server returned an unexpected response format.`);
-      }
-
-      if (response.ok) {
-        setStatus({ type: "success", message: "Message sent successfully! We will get back to you soon." });
-        (e.target as HTMLFormElement).reset();
-      } else {
-        setStatus({ type: "error", message: result.error || "Failed to send message." });
-      }
-    } catch (error: any) {
-      console.error("Form submission error:", error);
-      setStatus({ type: "error", message: error.message || "An error occurred. Please try again later." });
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
 
   return (
     <div className="pt-32 pb-24 px-6">
@@ -118,7 +65,12 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.email}</h4>
-                  <a href="mailto:manifesto.interiors@gmail.com" className="text-gray-600 hover:text-brand-burgundy transition-colors">
+                  <a 
+                    href="https://mail.google.com/mail/?view=cm&fs=1&to=manifesto.interiors@gmail.com" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-gray-600 hover:text-brand-burgundy transition-colors"
+                  >
                     manifesto.interiors@gmail.com
                   </a>
                 </div>
@@ -140,80 +92,31 @@ export default function Contact() {
             </div>
           </motion.div>
 
-          {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: isRTL ? -50 : 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8 }}
-            className="bg-gray-50 p-10 md:p-16 border border-gray-100"
+            className="bg-brand-brown/5 p-12 md:p-20 border border-brand-brown/10 flex flex-col items-center justify-center text-center"
           >
-            <h3 className="text-3xl font-serif text-brand-brown mb-8">{t.contact.formTitle}</h3>
-            
-            {status && (
-              <div className={cn(
-                "mb-8 p-4 flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-1",
-                status.type === "success" ? "bg-green-50 text-green-800 border border-green-100" : "bg-red-50 text-red-800 border border-red-100"
-              )}>
-                {status.type === "success" ? (
-                  <CheckCircle2 size={20} className="shrink-0" />
-                ) : (
-                  <AlertCircle size={20} className="shrink-0" />
-                )}
-                {status.message}
-              </div>
-            )}
-
-            <form 
-              onSubmit={handleSubmit}
-              className="space-y-6"
+            <div className="w-20 h-20 bg-brand-burgundy/10 flex items-center justify-center rounded-full mb-8">
+              <Mail className="text-brand-burgundy" size={36} />
+            </div>
+            <h3 className="text-3xl md:text-4xl font-serif text-brand-brown mb-6">{t.contact.formTitle}</h3>
+            <p className="text-gray-600 mb-10 max-w-md mx-auto leading-relaxed">
+              We've simplified our contact process. Click the button below to send us an email directly from your Gmail account.
+            </p>
+            <Button 
+              asChild
+              className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-10 py-8 text-xl uppercase tracking-widest transition-all hover:scale-105 shadow-xl"
             >
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.nameLabel}</label>
-                  <Input 
-                    name="name"
-                    required
-                    className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
-                  />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.emailLabel}</label>
-                  <Input 
-                    name="email"
-                    type="email" 
-                    required
-                    className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
-                  />
-                </div>
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.subjectLabel}</label>
-                <Input 
-                  name="subject"
-                  required
-                  className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 h-12" 
-                />
-              </div>
-              <div className="space-y-2">
-                <label className="text-xs uppercase tracking-widest font-medium text-gray-500">{t.contact.messageLabel}</label>
-                <Textarea 
-                  name="message"
-                  required
-                  className="rounded-none border-gray-200 focus:border-brand-burgundy focus:ring-0 min-h-[150px]" 
-                />
-              </div>
-              <Button 
-                type="submit" 
-                disabled={isSubmitting}
-                className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none w-full py-7 text-lg uppercase tracking-widest"
+              <a 
+                href="https://mail.google.com/mail/?view=cm&fs=1&to=manifesto.interiors@gmail.com" 
+                target="_blank" 
+                rel="noopener noreferrer"
               >
-                {isSubmitting ? (
-                  <>Sending... <Loader2 className="ml-2 animate-spin" size={18} /></>
-                ) : (
-                  <>{t.contact.send} <Send className={cn("ml-2", isRTL && "mr-2 ml-0")} size={18} /></>
-                )}
-              </Button>
-            </form>
+                {t.contact.send} <Send className={cn("ml-3", isRTL && "mr-3 ml-0")} size={22} />
+              </a>
+            </Button>
           </motion.div>
         </div>
       </div>
