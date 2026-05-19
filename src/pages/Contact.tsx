@@ -34,11 +34,13 @@ export default function Contact() {
         body: JSON.stringify(data),
       });
 
+      const text = await response.text();
       let result;
       try {
-        result = await response.json();
+        result = JSON.parse(text);
       } catch (err) {
-        throw new Error("Invalid server response. Please try again later.");
+        console.error("Parse error:", err, "Raw text:", text);
+        throw new Error(`Server returned non-JSON response (${response.status}). Please check server configuration.`);
       }
 
       if (response.ok) {

@@ -42,18 +42,26 @@ async function startServer() {
       return res.status(400).json({ error: "All fields are required" });
     }
 
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      console.error("Missing EMAIL_USER or EMAIL_PASS environment variables");
+      return res.status(500).json({ 
+        error: "Server email configuration is incomplete. Please set EMAIL_USER and EMAIL_PASS in the environment." 
+      });
+    }
+
     try {
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
+        port: 587,
+        secure: false, // true for 465, false for other ports
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
         },
       });
 
-      console.log("Sending email from:", process.env.EMAIL_USER);
+      console.log("Attempting to send email via Gmail STARTTLS...");
+      console.log("From:", process.env.EMAIL_USER);
       console.log("To:", process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com");
 
       const mailOptions = {
@@ -68,8 +76,8 @@ async function startServer() {
       console.log("Email sent successfully");
       res.status(200).json({ success: "Message sent successfully" });
     } catch (error: any) {
-      console.error("Email error details:", error);
-      res.status(500).json({ error: error.message || "Failed to send message. Please check server logs." });
+      console.error("Nodemailer Error:", error);
+      res.status(500).json({ error: `Email Error: ${error.message || "Unknown error"}` });
     }
   });
 
