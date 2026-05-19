@@ -4,17 +4,30 @@ import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
 import nodemailer from "nodemailer";
+import fs from "fs";
 
 dotenv.config();
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// For ESM (tsx)
+const __filename = typeof import.meta !== 'undefined' ? fileURLToPath(import.meta.url) : '';
+const __dirname = typeof import.meta !== 'undefined' ? path.dirname(__filename) : '';
+// Note: In CJS bundled by esbuild, __dirname and __filename will be injected by esbuild or are already available.
 
 async function startServer() {
   const app = express();
   const PORT = 3000;
 
+  console.log(`Server starting in ${process.env.NODE_ENV || 'development'} mode`);
+
   app.use(express.json());
+
+  // Request logger to file and console
+  app.use((req, res, next) => {
+    const logEntry = `${new Date().toISOString()} - ${req.method} ${req.url}\n`;
+    console.log(logEntry);
+    fs.appendFileSync(path.join(process.cwd(), "server.log"), logEntry);
+    next();
+  });
 
   // API Routes - MUST be before any middleware
   app.get("/api/config", (req, res) => {
@@ -35,14 +48,17 @@ async function startServer() {
     });
   });
 
-  app.post("/api/contact", async (req, res) => {
+  app.post("/api/v1/contact", async (req, res) => {
     const { name, email, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    const emailUser = (process.env.EMAIL_USER || "").trim();
+    const emailPass = (process.env.EMAIL_PASS || "").replace(/\s+/g, ""); // Remove all spaces from App Password
+
+    if (!emailUser || !emailPass) {
       console.error("Missing EMAIL_USER or EMAIL_PASS environment variables");
       return res.status(500).json({ 
         error: "Server email configuration is incomplete. Please set EMAIL_USER and EMAIL_PASS in the environment." 
@@ -53,19 +69,16 @@ async function startServer() {
       const transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
         port: 587,
-        secure: false, // true for 465, false for other ports
+        secure: false, 
         auth: {
-          user: process.env.EMAIL_USER,
-          pass: process.env.EMAIL_PASS,
+          user: emailUser,
+          pass: emailPass,
         },
       });
 
-      console.log("Attempting to send email via Gmail STARTTLS...");
-      console.log("From:", process.env.EMAIL_USER);
-      console.log("To:", process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com");
-
+      console.log(`Attempting to send email via Gmail STARTTLS for ${emailUser}...`);
       const mailOptions = {
-        from: `"${name}" <${process.env.EMAIL_USER}>`,
+        from: `"Manifesto Website" <${emailUser}>`,
         to: process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com",
         subject: `[Contact Form] ${subject}`,
         text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
@@ -79,6 +92,11 @@ async function startServer() {
       console.error("Nodemailer Error:", error);
       res.status(500).json({ error: `Email Error: ${error.message || "Unknown error"}` });
     }
+  });
+
+  // Handle 404s for API routes specifically
+  app.all("/api/*", (req, res) => {
+    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
   });
 
   // Vite middleware for development
