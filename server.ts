@@ -3,6 +3,7 @@ import { createServer as createViteServer } from "vite";
 import path from "path";
 import { fileURLToPath } from "url";
 import dotenv from "dotenv";
+import nodemailer from "nodemailer";
 
 dotenv.config();
 
@@ -12,6 +13,8 @@ const __dirname = path.dirname(__filename);
 async function startServer() {
   const app = express();
   const PORT = 3000;
+
+  app.use(express.json());
 
   // API Routes - MUST be before any middleware
   app.get("/api/config", (req, res) => {
@@ -30,6 +33,38 @@ async function startServer() {
       cloudinaryCloudName: cloudName || "NOT_SET",
       cloudinaryUploadPreset: uploadPreset || "NOT_SET",
     });
+  });
+
+  app.post("/api/contact", async (req, res) => {
+    const { name, email, subject, message } = req.body;
+
+    if (!name || !email || !subject || !message) {
+      return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: `"${name}" <${email}>`,
+        to: process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com",
+        subject: `[Contact Form] ${subject}`,
+        text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
+        replyTo: email
+      };
+
+      await transporter.sendMail(mailOptions);
+      res.status(200).json({ success: "Message sent successfully" });
+    } catch (error) {
+      console.error("Email error:", error);
+      res.status(500).json({ error: "Failed to send message. Please check server logs." });
+    }
   });
 
   // Vite middleware for development
