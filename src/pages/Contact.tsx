@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { motion } from "motion/react";
-import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2 } from "lucide-react";
+import { Mail, Phone, MapPin, Send, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,7 +34,12 @@ export default function Contact() {
         body: JSON.stringify(data),
       });
 
-      const result = await response.json();
+      let result;
+      try {
+        result = await response.json();
+      } catch (err) {
+        throw new Error("Invalid server response. Please try again later.");
+      }
 
       if (response.ok) {
         setStatus({ type: "success", message: "Message sent successfully! We will get back to you soon." });
@@ -42,9 +47,9 @@ export default function Contact() {
       } else {
         setStatus({ type: "error", message: result.error || "Failed to send message." });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Form submission error:", error);
-      setStatus({ type: "error", message: "An error occurred. Please try again later." });
+      setStatus({ type: "error", message: error.message || "An error occurred. Please try again later." });
     } finally {
       setIsSubmitting(false);
     }
@@ -141,10 +146,14 @@ export default function Contact() {
             
             {status && (
               <div className={cn(
-                "mb-8 p-4 flex items-center gap-3 text-sm",
+                "mb-8 p-4 flex items-center gap-3 text-sm animate-in fade-in slide-in-from-top-1",
                 status.type === "success" ? "bg-green-50 text-green-800 border border-green-100" : "bg-red-50 text-red-800 border border-red-100"
               )}>
-                {status.type === "success" ? <CheckCircle2 size={20} /> : <Loader2 className="animate-spin" size={20} />}
+                {status.type === "success" ? (
+                  <CheckCircle2 size={20} className="shrink-0" />
+                ) : (
+                  <AlertCircle size={20} className="shrink-0" />
+                )}
                 {status.message}
               </div>
             )}

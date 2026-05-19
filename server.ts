@@ -44,15 +44,20 @@ async function startServer() {
 
     try {
       const transporter = nodemailer.createTransport({
-        service: "gmail",
+        host: "smtp.gmail.com",
+        port: 465,
+        secure: true,
         auth: {
           user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
         },
       });
 
+      console.log("Sending email from:", process.env.EMAIL_USER);
+      console.log("To:", process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com");
+
       const mailOptions = {
-        from: `"${name}" <${email}>`,
+        from: `"${name}" <${process.env.EMAIL_USER}>`,
         to: process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com",
         subject: `[Contact Form] ${subject}`,
         text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
@@ -60,10 +65,11 @@ async function startServer() {
       };
 
       await transporter.sendMail(mailOptions);
+      console.log("Email sent successfully");
       res.status(200).json({ success: "Message sent successfully" });
-    } catch (error) {
-      console.error("Email error:", error);
-      res.status(500).json({ error: "Failed to send message. Please check server logs." });
+    } catch (error: any) {
+      console.error("Email error details:", error);
+      res.status(500).json({ error: error.message || "Failed to send message. Please check server logs." });
     }
   });
 
