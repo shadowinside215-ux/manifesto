@@ -29,7 +29,20 @@ async function startServer() {
     next();
   });
 
-  // API Routes - MUST be before any middleware
+  // API Routes - MUST be before any static/Vite middleware
+  app.get("/api/health", (req, res) => {
+    res.json({ 
+      status: "ok", 
+      time: new Date().toISOString(),
+      env: process.env.NODE_ENV,
+      config: {
+        hasEmailUser: !!process.env.EMAIL_USER,
+        hasEmailPass: !!process.env.EMAIL_PASS,
+        receiver: process.env.CONTACT_RECEIVER_EMAIL || "manifesto.interiors@gmail.com"
+      }
+    });
+  });
+
   app.get("/api/config", (req, res) => {
     // Check various common naming patterns
     const cloudName = process.env.VITE_CLOUDINARY_CLOUD_NAME || 
@@ -48,7 +61,8 @@ async function startServer() {
     });
   });
 
-  app.post("/api/v1/contact", async (req, res) => {
+  app.post("/api/contact", async (req, res) => {
+    console.log("Contact form request received:", req.body);
     const { name, email, subject, message } = req.body;
 
     if (!name || !email || !subject || !message) {
@@ -96,7 +110,12 @@ async function startServer() {
 
   // Handle 404s for API routes specifically
   app.all("/api/*", (req, res) => {
-    res.status(404).json({ error: `API route not found: ${req.method} ${req.url}` });
+    console.warn(`404 API Route: ${req.method} ${req.url}`);
+    res.status(404).json({ 
+      error: "API route not found",
+      method: req.method,
+      path: req.url
+    });
   });
 
   // Vite middleware for development

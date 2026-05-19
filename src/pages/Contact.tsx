@@ -26,21 +26,24 @@ export default function Contact() {
     };
 
     try {
-      const response = await fetch("/api/v1/contact", {
+      const response = await fetch("/api/contact", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Accept": "application/json"
         },
         body: JSON.stringify(data),
       });
 
-      const text = await response.text();
+      const contentType = response.headers.get("content-type");
       let result;
-      try {
-        result = JSON.parse(text);
-      } catch (err) {
-        console.error("Parse error:", err, "Raw text:", text);
-        throw new Error(`Server returned non-JSON response (${response.status}). Please check server configuration.`);
+      
+      if (contentType && contentType.includes("application/json")) {
+        result = await response.json();
+      } else {
+        const text = await response.text();
+        console.error("Non-JSON response:", text);
+        throw new Error(`Server error (${response.status}): The server returned an unexpected response format.`);
       }
 
       if (response.ok) {
@@ -99,12 +102,12 @@ export default function Contact() {
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.call}</h4>
                   <a 
-                    href="https://wa.me/212679900799" 
+                    href="https://wa.me/212771660212" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     className="text-gray-600 hover:text-brand-burgundy transition-colors"
                   >
-                    0679900799
+                    0771660212
                   </a>
                 </div>
               </div>
