@@ -1,5 +1,6 @@
 import * as React from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { useAuth, HIDE_ADMIN_FEATURES } from "@/contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 import { db, collection, addDoc, query, orderBy, onSnapshot, deleteDoc, doc, handleFirestoreError, OperationType, setDoc, getDoc, updateDoc, serverTimestamp } from "@/lib/firebase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -277,6 +278,10 @@ export default function AdminPanel() {
       setSavingEdit(false);
     }
   };
+
+  if (HIDE_ADMIN_FEATURES) {
+    return <Navigate to="/" replace />;
+  }
 
   if (authLoading) {
     return (

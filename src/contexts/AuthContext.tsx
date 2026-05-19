@@ -11,6 +11,8 @@ interface AuthContextType {
 
 const AuthContext = React.createContext<AuthContextType | undefined>(undefined);
 
+export const HIDE_ADMIN_FEATURES = true;
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = React.useState<User | null>(null);
   const [isAdminState, setIsAdminState] = React.useState<boolean>(() => {
@@ -18,8 +20,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
   const [loading, setLoading] = React.useState(true);
 
-  // isAdmin is only true if we have a user AND the flag is set
-  const isAdmin = !!user && isAdminState;
+  // isAdmin is only true if HIDE_ADMIN_FEATURES is false, we have a user AND the flag is set
+  const isAdmin = !HIDE_ADMIN_FEATURES && !!user && isAdminState;
 
   React.useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -36,7 +38,10 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const login = async (username: string, password: string): Promise<boolean> => {
-    if (username === "admin" && password === "admin2006") {
+    const cleanUsername = (username || "").trim();
+    const cleanPassword = (password || "").replace(/\s+/g, ""); // Remove all space characters in case of space typos
+    
+    if (cleanUsername === "admin" && cleanPassword === "admin2006") {
       try {
         await signInAnonymously(auth);
         setIsAdminState(true);

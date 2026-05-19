@@ -48,14 +48,28 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="text-lg font-serif text-brand-brown mb-1">{t.contact.call}</h4>
-                  <a 
-                    href="https://wa.me/212771660212" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-gray-600 hover:text-brand-burgundy transition-colors"
-                  >
-                    0771660212
-                  </a>
+                  <div className="flex flex-col gap-1 text-gray-600">
+                    <p className="flex items-center gap-2">
+                      <span className="text-[10px] bg-brand-brown/10 text-brand-brown px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">WhatsApp</span>
+                      <a 
+                        href="https://wa.me/212771660212" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        className="hover:text-brand-burgundy transition-colors font-medium"
+                      >
+                        0771660212
+                      </a>
+                    </p>
+                    <p className="flex items-center gap-2">
+                      <span className="text-[10px] bg-brand-burgundy/10 text-brand-burgundy px-1.5 py-0.5 rounded uppercase font-bold tracking-wider">Phone</span>
+                      <a 
+                        href="tel:+212679900799" 
+                        className="hover:text-brand-burgundy transition-colors font-medium"
+                      >
+                        0679900799
+                      </a>
+                    </p>
+                  </div>
                 </div>
               </div>
 

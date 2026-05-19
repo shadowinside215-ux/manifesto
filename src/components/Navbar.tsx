@@ -7,7 +7,10 @@ import { cn } from "@/lib/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Language } from "@/lib/translations";
 
+import { useAuth } from "@/contexts/AuthContext";
+
 export default function Navbar() {
+  const { isAdmin, logout } = useAuth();
   const [isOpen, setIsOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLangOpen, setIsLangOpen] = useState(false);

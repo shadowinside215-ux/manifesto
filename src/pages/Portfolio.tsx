@@ -71,7 +71,7 @@ function SortablePhoto({
     <div
       ref={setNodeRef}
       style={style}
-      className="group relative aspect-[3/4] overflow-hidden cursor-pointer"
+      className="group relative aspect-[3/4] overflow-hidden cursor-pointer bg-neutral-100"
     >
       <img
         src={project.url}
@@ -80,7 +80,56 @@ function SortablePhoto({
         referrerPolicy="no-referrer"
       />
       
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end p-6 text-center bg-gradient-to-t from-black/60 to-transparent">
+      {isAdmin && (
+        <div 
+          className="absolute top-3 inset-x-3 z-20 flex justify-between items-center opacity-100 md:opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
+          {/* Drag Handle to reorder */}
+          <div
+            {...attributes}
+            {...listeners}
+            className="p-2 bg-black/85 hover:bg-brand-burgundy text-white cursor-grab active:cursor-grabbing backdrop-blur-sm transition-colors border border-white/10 flex items-center gap-1.5 text-[10px] uppercase tracking-wider font-bold select-none"
+            title="Drag to reorder"
+          >
+            <Move size={14} />
+            <span>Move</span>
+          </div>
+
+          <div className="flex gap-1.5">
+            {/* Edit Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleEdit(project);
+              }}
+              className="p-2 bg-black/85 hover:bg-brand-burgundy text-white backdrop-blur-sm transition-colors border border-white/10 flex items-center justify-center"
+              title="Edit Photo"
+            >
+              <Edit size={14} />
+            </button>
+            {/* Delete Button */}
+            <button
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                handleDelete(project.id);
+              }}
+              className="p-2 bg-brand-burgundy hover:bg-red-600 text-white backdrop-blur-sm transition-all border border-white/10 flex items-center justify-center"
+              title="Delete Photo"
+            >
+              <Trash2 size={14} />
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col items-center justify-end p-6 text-center bg-gradient-to-t from-black/80 via-black/40 to-transparent">
         {project.title && project.title !== "Untitled" && (
           <h3 className="text-white text-xl font-serif transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500 delay-75">
             {project.title}
@@ -181,14 +230,19 @@ export default function Portfolio() {
 
       const newFilteredItems = arrayMove(filteredItems, oldIndex, newIndex) as Photo[];
       
-      // Update local state immediately for smooth UI
+      // Update local state immediately with the new order indexes for smooth UI
+      const updatedFilteredItems = newFilteredItems.map((item, index) => ({
+        ...item,
+        order: index
+      }));
+
       const otherCategories = projects.filter(p => p.category !== activeCategory);
-      setProjects([...otherCategories, ...newFilteredItems].sort((a, b) => (a.order || 0) - (b.order || 0)));
+      setProjects([...otherCategories, ...updatedFilteredItems]);
 
       // Update Firestore in batch
       try {
         const batch = writeBatch(db);
-        newFilteredItems.forEach((item, index) => {
+        updatedFilteredItems.forEach((item, index) => {
           batch.update(doc(db, "photos", item.id), {
             order: index
           });
@@ -245,6 +299,17 @@ export default function Portfolio() {
               </button>
             ))}
           </div>
+
+          {isAdmin && (
+            <div className="flex justify-center -mt-6 mb-12">
+              <Button
+                onClick={() => setIsUploadModalOpen(true)}
+                className="bg-brand-burgundy hover:bg-brand-burgundy-dark text-white rounded-none px-8 py-6 uppercase tracking-widest text-sm transition-all hover:scale-105"
+              >
+                <Plus className="mr-2" size={18} /> Add New Photo
+              </Button>
+            </div>
+          )}
         </div>
 
         {loading ? (

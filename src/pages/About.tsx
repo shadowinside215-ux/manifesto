@@ -11,17 +11,24 @@ import { cn } from "@/lib/utils";
 export default function About() {
   const { t, isRTL } = useLanguage();
   const { isAdmin } = useAuth();
-  const [photoUrl, setPhotoUrl] = useState("https://images.unsplash.com/photo-1586023492125-27b2c045efd7?auto=format&fit=crop&q=80&w=1000");
+  const [photoUrl, setPhotoUrl] = useState<string>(() => {
+    return localStorage.getItem("about_photo_url") || "https://res.cloudinary.com/dx8xhutpu/image/upload/v1777987164/lxzvfyg48pc7rrnwr7xz.png";
+  });
+  const [loading, setLoading] = useState(false);
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
 
   const fetchAboutPhoto = async () => {
     try {
       const aboutDoc = await getDoc(doc(db, "settings", "about"));
       if (aboutDoc.exists() && aboutDoc.data().url) {
-        setPhotoUrl(aboutDoc.data().url);
+        const url = aboutDoc.data().url;
+        setPhotoUrl(url);
+        localStorage.setItem("about_photo_url", url);
       }
     } catch (error) {
       console.error("Failed to fetch about photo:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -36,6 +43,7 @@ export default function About() {
         updatedAt: new Date()
       });
       setPhotoUrl(url);
+      localStorage.setItem("about_photo_url", url);
     } catch (error) {
       console.error("Failed to update about image:", error);
     }
@@ -77,13 +85,21 @@ export default function About() {
             transition={{ duration: 0.8 }}
             className="relative group/about"
           >
-            <div className="aspect-square overflow-hidden relative group/about">
-              <img
-                src={photoUrl}
-                alt="Studio"
-                className="w-full h-full object-cover shadow-2xl"
-                referrerPolicy="no-referrer"
-              />
+            <div className="aspect-square overflow-hidden relative group/about bg-gray-100">
+              {loading ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-10 h-10 border-4 border-brand-burgundy border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                <img
+                  src={photoUrl || "https://res.cloudinary.com/dx8xhutpu/image/upload/v1777987164/lxzvfyg48pc7rrnwr7xz.png"}
+                  alt="Studio"
+                  className="w-full h-full object-cover shadow-2xl transition-opacity duration-500"
+                  referrerPolicy="no-referrer"
+                  onLoad={(e) => (e.currentTarget.style.opacity = "1")}
+                  style={{ opacity: 0 }}
+                />
+              )}
             </div>
             <div className={cn(
               "absolute -top-10 w-64 h-64 bg-brand-brown/10 -z-10",

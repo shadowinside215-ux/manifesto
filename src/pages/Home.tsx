@@ -20,7 +20,10 @@ interface Project {
 
 export default function Home() {
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
-  const [aboutImage, setAboutImage] = useState("https://images.unsplash.com/photo-1616486341351-7925b15894ca?auto=format&fit=crop&q=80&w=800");
+  const [aboutImage, setAboutImage] = useState<string>(() => {
+    return localStorage.getItem("story_photo_url") || "https://res.cloudinary.com/dx8xhutpu/image/upload/v1778159775/vvci6zyxi1ka6zjo9fpa.jpg";
+  });
+  const [loadingStory, setLoadingStory] = useState(false);
   const { isAdmin } = useAuth();
   const { t, isRTL } = useLanguage();
   const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
@@ -68,8 +71,14 @@ export default function Home() {
     // Fetch site settings for story image
     const unsubSettings = onSnapshot(doc(db, "settings", "story"), (doc) => {
       if (doc.exists()) {
-        setAboutImage(doc.data().url || "https://images.unsplash.com/photo-1616486341351-7925b15894ca?auto=format&fit=crop&q=80&w=800");
+        const url = doc.data().url;
+        setAboutImage(url);
+        localStorage.setItem("story_photo_url", url);
       }
+      setLoadingStory(false);
+    }, (err) => {
+      console.error("Settings fetch error:", err);
+      setLoadingStory(false);
     });
 
     return () => {
@@ -220,13 +229,21 @@ export default function Home() {
             transition={{ duration: 0.8 }}
             className="relative group/about"
           >
-            <div className="aspect-[4/5] overflow-hidden relative">
-              <img
-                src={aboutImage}
-                alt="Interior Design"
-                className="w-full h-full object-cover"
-                referrerPolicy="no-referrer"
-              />
+            <div className="aspect-[4/5] overflow-hidden relative bg-gray-100">
+              {loadingStory ? (
+                <div className="w-full h-full flex items-center justify-center">
+                  <div className="w-10 h-10 border-4 border-brand-burgundy border-t-transparent rounded-full animate-spin" />
+                </div>
+              ) : (
+                <img
+                  src={aboutImage || "https://res.cloudinary.com/dx8xhutpu/image/upload/v1778159775/vvci6zyxi1ka6zjo9fpa.jpg"}
+                  alt="Interior Design"
+                  className="w-full h-full object-cover transition-opacity duration-500"
+                  referrerPolicy="no-referrer"
+                  onLoad={(e) => (e.currentTarget.style.opacity = "1")}
+                  style={{ opacity: 0 }}
+                />
+              )}
             </div>
             <motion.div 
               initial={{ opacity: 0, y: 20 }}

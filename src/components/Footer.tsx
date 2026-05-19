@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { Linkedin, Mail, Phone, MapPin, Lock } from "lucide-react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { cn } from "@/lib/utils";
+import { useAuth, HIDE_ADMIN_FEATURES } from "@/contexts/AuthContext";
 
 export default function Footer() {
   const { t, isRTL } = useLanguage();
+  const { isAdmin } = useAuth();
 
   return (
     <footer className="bg-brand-brown text-white pt-20 pb-10 px-6">
@@ -68,16 +70,27 @@ export default function Footer() {
                 N° 15 Rue Tlemcen Résidence Ghita. V.N, Meknès 50000
               </a>
             </li>
-            <li className="flex items-center gap-3">
-              <Phone size={18} className="text-brand-burgundy shrink-0" />
-              <a 
-                href="https://wa.me/212771660212" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="hover:text-white transition-colors"
-              >
-                0771660212
-              </a>
+            <li className="flex flex-col gap-1.5 text-xs text-gray-300">
+              <span className="flex items-center gap-2">
+                <span className="text-[9px] bg-white/10 text-white px-1.5 py-0.5 rounded font-bold tracking-wider uppercase">WhatsApp</span>
+                <a 
+                  href="https://wa.me/212771660212" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="hover:text-white transition-colors text-sm font-medium"
+                >
+                  0771660212
+                </a>
+              </span>
+              <span className="flex items-center gap-2">
+                <Phone size={14} className="text-brand-burgundy shrink-0" />
+                <a 
+                  href="tel:+212679900799" 
+                  className="hover:text-white transition-colors text-sm font-medium"
+                >
+                  0679900799
+                </a>
+              </span>
             </li>
             <li className="flex items-center gap-3">
               <Mail size={18} className="text-brand-burgundy shrink-0" />
@@ -100,6 +113,11 @@ export default function Footer() {
       )}>
         <p>© {new Date().getFullYear()} Manifesto Interiors. {t.footer.rights}</p>
         <div className={cn("flex items-center gap-6", isRTL && "flex-row-reverse")}>
+          {!HIDE_ADMIN_FEATURES && (
+            <Link to="/admin" className="text-gray-400/50 hover:text-white transition-colors">
+              <Lock size={12} />
+            </Link>
+          )}
           <a href="#" className="hover:text-white">{t.footer.privacy}</a>
           <a href="#" className="hover:text-white">{t.footer.terms}</a>
         </div>
